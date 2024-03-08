@@ -3,6 +3,8 @@ import os
 from flask import Flask, render_template, url_for, redirect, request, flash
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import *
+
 from forms import RegistrationForm, LoginForm, SearchForm, NewEmployerForm, EditEmployerForm,\
     RelationForm, DeleteEmployerForm, AddAdminForm
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -52,14 +54,61 @@ class Employer(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     employer_name = db.Column(db.String(60), nullable=False, unique=True)
-    headquarters_address = db.Column(db.String(60), nullable=False)
-    description = db.Column(db.String(60))
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime)
+    headquarters_address = db.Column(db.String(60), nullable=False)
+    industry_type = db.Column(db.String(60))
+    description = db.Column(db.String(60))
     child_employers = db.relationship("Employer", secondary=employer_relation,
                                       primaryjoin=(employer_relation.c.parent_id == id),
                                       secondaryjoin=(employer_relation.c.child_id == id),
                                       backref="parent_employers")
+
+class EmployeeEmploymentRecord(db.Model):
+    __tablename__ = "employeeEmploymentRecord"
+
+    theEmployee
+    theEmployer
+    jobTitle = db.Column(db.String(60), nullable=False)
+    startDate = db.Column(db.DateTime)
+    securityClearance = db.Column(db.String(60), nullable=False)
+    payGrade = db.Column(db.String(60), nullable=False)
+    employerAddress = db.Column(db.String(60), nullable=False)
+
+class Employee(db.Model):
+    __tablename__ = "employee"
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(60), nullable=False)
+    last_name = db.Column(db.String(60), nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False, unique=True)
+    employee_address = db.Column(db.String(60), nullable=False)
+    email_address = db.Column(db.String(60), nullable=False)
+    employers =
+
+class DegreeOrCertification(db.Model):
+    __tablename__ = "degreeOrCertification"
+
+    degreeOrCertificationName = db.Column(db.String(60), nullable=False)
+    isDegree = db.Column(db.Boolean)
+    isCertification = db.Column(db.Boolean)
+    degreeType = db.Column(db.String(60), nullable=False)
+
+    __table_args__ = (
+        CheckConstraint("isDegree ^ isCertification"),
+    )
+
+class EmployeeCertificationForm(db.Model):
+    certAwardedTo =
+    grantingInstitution =
+    grantedCertification =
+    awardDate = db.Column(db.DateTime)
+
+class Institution(db.Model):
+    __tablename__ = "institution"
+
+    id = db.Column(db.Integer, primary_key=True)
+    institution_name = db.Column(db.String(60), nullable=False, unique=True)
 
 
 @login_manager.user_loader
