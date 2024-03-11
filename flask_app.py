@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 
 from flask import Flask, render_template, url_for, redirect, request, flash
@@ -59,7 +60,9 @@ class Employer(db.Model):
     headquarters_address = db.Column(db.String(60), nullable=False)
     industry_type = db.Column(db.String(60))
     description = db.Column(db.String(60))
-    child_employers = db.relationship("Employer", secondary=employer_relation,
+    hasEmployed = db.relationship('EmployeeEmploymentRecord', backref='theEmployer')
+    child_employers = db.relationship("Employer",
+                                      secondary=employer_relation,
                                       primaryjoin=(employer_relation.c.parent_id == id),
                                       secondaryjoin=(employer_relation.c.child_id == id),
                                       backref="parent_employers")
@@ -67,8 +70,8 @@ class Employer(db.Model):
 class EmployeeEmploymentRecord(db.Model):
     __tablename__ = "employeeEmploymentRecord"
 
-    theEmployee
-    theEmployer
+    theEmployee = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)
+    theEmployer = db.Column(db.Integer, db.ForeignKey('employer.id'), nullable=False)
     jobTitle = db.Column(db.String(60), nullable=False)
     startDate = db.Column(db.DateTime)
     securityClearance = db.Column(db.String(60), nullable=False)
@@ -84,7 +87,7 @@ class Employee(db.Model):
     phone_number = db.Column(db.String(20), nullable=False, unique=True)
     employee_address = db.Column(db.String(60), nullable=False)
     email_address = db.Column(db.String(60), nullable=False)
-    employers =
+    employers = db.relationship('EmployeeEmploymentRecord', backref='theEmployee')
 
 class DegreeOrCertification(db.Model):
     __tablename__ = "degreeOrCertification"
@@ -99,10 +102,13 @@ class DegreeOrCertification(db.Model):
     )
 
 class EmployeeCertificationForm(db.Model):
-    certAwardedTo =
-    grantingInstitution =
-    grantedCertification =
-    awardDate = db.Column(db.DateTime)
+    __tablename__="employeeCertificationForm"
+
+    id = db.Column(db.Integer, primary_key=True)
+    certAwardedTo = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)    ##may need to be changed to just "employee" and remove '.id' same goes for as follows
+    grantingInstitution = db.Column(db.Integer, db.ForeignKey('institution.id'), nullable=False)
+    grantedCertification = db.Column(db.Integer, db.ForeignKey('degreeOrCertification.id'), nullable=False)
+    awardDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 class Institution(db.Model):
     __tablename__ = "institution"
