@@ -60,7 +60,7 @@ class Employer(db.Model):
     headquarters_address = db.Column(db.String(60), nullable=False)
     industry_type = db.Column(db.String(60))
     description = db.Column(db.String(60))
-    hasEmployed = db.relationship('EmployeeEmploymentRecord', backref='theEmployer')
+    hasEmployed = db.relationship('EmployeeEmploymentRecord')
     child_employers = db.relationship("Employer",
                                       secondary=employer_relation,
                                       primaryjoin=(employer_relation.c.parent_id == id),
@@ -88,7 +88,7 @@ class Employee(db.Model):
     phone_number = db.Column(db.String(20), nullable=False, unique=True)
     employee_address = db.Column(db.String(60), nullable=False)
     email_address = db.Column(db.String(60), nullable=False)
-    employers = db.relationship('EmployeeEmploymentRecord', backref='theEmployee')
+    employers = db.relationship('EmployeeEmploymentRecord')
 
 class DegreeOrCertification(db.Model):
     __tablename__ = "degreeOrCertification"
