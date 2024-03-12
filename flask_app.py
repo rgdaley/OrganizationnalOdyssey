@@ -25,7 +25,7 @@ app.config['MAIL_PASSWORD'] = "pgjdzozsuadatvzw"
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config["FERNET_KEY"] = "VvPY8Yqf8U42_CyPWJwaDuHu4r-8LKcVwGgTJT3j_NQ="
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://" + "Brmiller2" + ":" + "bgWt5C%P^xpKeo40" + "@" + "Brmiller2.mysql.pythonanywhere-services.com" + ":3306/" + "Brmiller2$default"#database URI
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://" + "Brmiller2" + ":" + "8GH3#L!J&#Wpub^v" + "@" + "Brmiller2.mysql.pythonanywhere-services.com" + ":3306/" + "Brmiller2$default"#database URI
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -99,9 +99,9 @@ class DegreeOrCertification(db.Model):
     isCertification = db.Column(db.Boolean)
     degreeType = db.Column(db.String(60), nullable=False)
 
-    __table_args__ = (
-        CheckConstraint("isDegree ^ isCertification"),
-    )
+    #__table_args__ = (
+    #    CheckConstraint("isDegree ^ isCertification"),
+    #)
 
 class EmployeeCertificationForm(db.Model):
     __tablename__="employeeCertificationForm"
