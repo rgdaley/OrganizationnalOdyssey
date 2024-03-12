@@ -64,8 +64,8 @@ class Employer(db.Model):
     child_employers = db.relationship("Employer",
                                       secondary=employer_relation,
                                       primaryjoin=(employer_relation.c.parent_id == id),
-                                      secondaryjoin=(employer_relation.c.child_id == id),
-                                      backref="parent_employers")
+                                      secondaryjoin=(employer_relation.c.child_id == id)
+                                      )
 
 class EmployeeEmploymentRecord(db.Model):
     __tablename__ = "employeeEmploymentRecord"
