@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
 
 from forms import RegistrationForm, LoginForm, SearchForm, NewEmployerForm, EditEmployerForm,\
-    RelationForm, DeleteEmployerForm, AddAdminForm
+    RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_mail import Mail, Message
 from cryptography.fernet import Fernet
@@ -416,6 +416,78 @@ def add_admin():
         flash("New admin successfully added", "success")
 
     return redirect(url_for("admin"))
+
+
+# /////////////////// ADDING ALL PHASE 2 UCs BELOW HERE \\\\\\\\\\\\\\\\\\\\\\\\\\
+
+@app.route("/add_employee", methods=["GET", "POST"])
+@login_required
+def add_employee():
+    if not current_user.admin:
+        flash("Unauthorized Access", "danger")
+        return redirect(url_for("home"))
+    form = AddEmployeeForm()
+    if form.validate_on_submit():
+        new_employee = Employee(first_name=form.first_name.data, last_name=form.last_name.data,
+                                phone_number=form.phone_number.data, employee_address=form.employee_address.data,
+                                email_address=form.email_address.data)
+        db.session.add(new_employee)
+        db.session.commit()
+        flash("Employee added successfully!", "success")
+        return redirect(url_for("admin"))
+    return render_template("add_employee.html", form=form)
+
+
+@app.route("/record_new_job", methods=["GET", "POST"])
+@login_required
+def record_new_job():
+    if not current_user.admin:
+        flash("Unauthorized Access", "danger")
+        return redirect(url_for("home"))
+
+    form = RecordNewJobForm()
+    # Fetch all employees and employers by their First and Last name
+    form.employee_id.choices = [(e.id, f"{e.first_name} {e.last_name}") for e in Employee.query.order_by(Employee.first_name).all()]
+    form.employer_id.choices = [(er.id, er.employer_name) for er in Employer.query.order_by(Employer.employer_name).all()]
+
+    if form.validate_on_submit():
+        employee_id = form.employee_id.data
+        employer_id = form.employer_id.data
+
+        # Checking for duplicate data
+        existing_record = EmployeeEmploymentRecord.query.filter(
+            EmployeeEmploymentRecord.theEmployee == employee_id,
+            EmployeeEmploymentRecord.theEmployer == employer_id,
+            EmployeeEmploymentRecord.jobTitle == form.jobTitle.data,
+            or_(
+                EmployeeEmploymentRecord.startDate <= form.endDate.data,
+                EmployeeEmploymentRecord.endDate >= form.startDate.data
+            )
+        ).first()
+
+        # If duplicate data is found we flash this message
+        if existing_record:
+            flash("An employment record with similar details already exists.", "danger")
+        else:
+            new_job_record = EmployeeEmploymentRecord(
+                theEmployee=employee_id,
+                theEmployer=employer_id,
+                jobTitle=form.jobTitle.data,
+                startDate=form.startDate.data,
+                endDate=form.endDate.data
+            )
+            db.session.add(new_job_record)
+            db.session.commit()
+            flash("New job record added successfully!", "success")
+
+        return redirect(url_for("admin"))
+    return render_template("record_new_job.html", form=form)
+
+#       NEED TO ADD:
+#   - HTML documents for adding employees, recording new jobs, etc.
+#   - Need to add the use cases for maintaining Employees so that we can have the relationship between employees and
+#    employers
+#   -
 
 
 if __name__ == "__main__":
