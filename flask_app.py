@@ -70,6 +70,7 @@ class Employer(db.Model):
 class EmployeeEmploymentRecord(db.Model):
     __tablename__ = "employeeEmploymentRecord"
 
+    id = db.Column(db.Integer, primary_key=True)
     theEmployee = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)
     theEmployer = db.Column(db.Integer, db.ForeignKey('employer.id'), nullable=False)
     jobTitle = db.Column(db.String(60), nullable=False)
