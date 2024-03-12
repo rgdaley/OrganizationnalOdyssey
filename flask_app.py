@@ -93,6 +93,7 @@ class Employee(db.Model):
 class DegreeOrCertification(db.Model):
     __tablename__ = "degreeOrCertification"
 
+    id = db.Column(db.Integer, primary_key=True)
     degreeOrCertificationName = db.Column(db.String(60), nullable=False)
     isDegree = db.Column(db.Boolean)
     isCertification = db.Column(db.Boolean)
