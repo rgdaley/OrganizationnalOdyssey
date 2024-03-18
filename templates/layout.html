@@ -9,6 +9,19 @@
         <title>OrginizationalOdyssey</title>
     {% endif %}
 
+    <!-- Scripts for Button Forms -->
+    <script>
+        function fullwindowpopupjob(){
+            window.open("record_new_job.html","bfs","fullscreen,scrollbars")
+        }
+    </script>
+
+    <script>
+        function fullwindowpopupemployee(){
+            window.open("new_employee.html","bfs","fullscreen,scrollbars")
+        }
+    </script>
+
     <!-- Bootstrap css -->
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
@@ -64,6 +77,21 @@
             </div>
         </div>
     </main>
+
+    <footer class="p-3 text-bg-dark">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="text-end col-md-4">
+                    <form>
+                        <input type="button" onClick="fullwindowpopupjob()" value="Record New Job">
+                    </form>
+                    <form>
+                        <input type="button" onClick="fullwindowpopupemployee()" value="Add Employee/Employer">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
