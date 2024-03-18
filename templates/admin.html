@@ -154,30 +154,30 @@
                 {{ add_employee_form.hidden_tag() }}
                 <legend class="border-bottom mb-4">Add Employee</legend>
                 <div class="form-group">
-                    {{ add_employee_form.employee_firstname.label(class="form-control-label") }}
-                    {% if add_employee_form.employee_firstname.errors %}
-                        {{ add_employee_form.employee_firstname(class="form-control form-control-lg is-invalid") }}
+                    {{ add_employee_form.first_name.label(class="form-control-label") }}
+                    {% if add_employee_form.first_name.errors %}
+                        {{ add_employee_form.first_name(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in add_employee_form.employee_firstname.errors %}
+                            {% for error in add_employee_form.first_name.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ add_employee_form.employee_firstname(class="form-control form-control-lg") }}
+                        {{ add_employee_form.first_name(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
 
                 <div class="form-group">
-                    {{ add_employee_form.employee_lastname.label(class="form-control-label") }}
-                    {% if add_employee_form.employee_lastname.errors %}
-                        {{ add_employee_form.employee_lastname(class="form-control form-control-lg is-invalid") }}
+                    {{ add_employee_form.last_name.label(class="form-control-label") }}
+                    {% if add_employee_form.last_name.errors %}
+                        {{ add_employee_form.last_name(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in add_employee_form.employee_lastname.errors %}
+                            {% for error in add_employee_form.last_name.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ add_employee_form.employee_lastname(class="form-control form-control-lg") }}
+                        {{ add_employee_form.last_name(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
 
@@ -214,30 +214,30 @@
                 <legend class="border-bottom mb-4">Edit Employee</legend>
 
                 <div class="form-group">
-                    {{ edit_employee_form.employee_firstname.label(class="form-control-label") }}
-                    {% if edit_employee_form.employee_firstname.errors %}
-                        {{ edit_employee_form.employee_firstname(class="form-control form-control-lg is-invalid") }}
+                    {{ edit_employee_form.first_name.label(class="form-control-label") }}
+                    {% if edit_employee_form.first_name.errors %}
+                        {{ edit_employee_form.first_name(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in edit_employee_form.employee_firstname.errors %}
+                            {% for error in edit_employee_form.first_name.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ edit_employee_form.employee_firstname(class="form-control form-control-lg") }}
+                        {{ edit_employee_form.first_name(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
 
                 <div class="form-group">
-                    {{ edit_employee_form.employee_lastname.label(class="form-control-label") }}
-                    {% if edit_employee_form.employee_lastname.errors %}
-                        {{ edit_employee_form.employee_lastname(class="form-control form-control-lg is-invalid") }}
+                    {{ edit_employee_form.last_name.label(class="form-control-label") }}
+                    {% if edit_employee_form.last_name.errors %}
+                        {{ edit_employee_form.last_name(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in edit_employee_form.employee_lastname.errors %}
+                            {% for error in edit_employee_form.last_name.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ edit_employee_form.employee_lastname(class="form-control form-control-lg") }}
+                        {{ edit_employee_form.last_name(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
 
@@ -274,30 +274,30 @@
                 <legend class="border-bottom mb-4">Delete Employee</legend>
 
                 <div class="form-group">
-                    {{ delete_employee_form.employee_lastname.label(class="form-control-label") }}
-                    {% if delete_employee_form.employee_lastname.errors %}
-                        {{ delete_employee_form.employee_lastname(class="form-control form-control-lg is-invalid") }}
+                    {{ delete_employee_form.first_name.label(class="form-control-label") }}
+                    {% if delete_employee_form.first_name.errors %}
+                        {{ delete_employee_form.first_name(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in delete_employee_form.employee_lastname.errors %}
+                            {% for error in delete_employee_form.first_name.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ delete_employee_form.employee_lastname(class="form-control form-control-lg") }}
+                        {{ delete_employee_form.first_name(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
 
                 <div class="form-group">
-                    {{ delete_employee_form.employee_firstname.label(class="form-control-label") }}
-                    {% if delete_employee_form.employee_firstname.errors %}
-                        {{ delete_employee_form.employee_firstname(class="form-control form-control-lg is-invalid") }}
+                    {{ delete_employee_form.last_name.label(class="form-control-label") }}
+                    {% if delete_employee_form.last_name.errors %}
+                        {{ delete_employee_form.last_name(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in delete_employee_form.employee_firstname.errors %}
+                            {% for error in delete_employee_form.last_name.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ delete_employee_form.employee_firstname(class="form-control form-control-lg") }}
+                        {{ delete_employee_form.last_name(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
 
