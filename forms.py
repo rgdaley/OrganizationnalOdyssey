@@ -63,6 +63,7 @@ class AddEmployeeForm(FlaskForm):
     email_address = StringField("Email Address", validators=[DataRequired(), Email()])
     submit = SubmitField("Add Employee")
 
+
 class EditEmployeeForm(FlaskForm):
     first_name = StringField("First Name", validators=[DataRequired()])
     last_name = StringField("Last Name", validators=[DataRequired()])
@@ -71,10 +72,12 @@ class EditEmployeeForm(FlaskForm):
     email_address = StringField("Email Address", validators=[DataRequired(), Email()])
     submit = SubmitField("Edit Employee")
 
+
 class DeleteEmployeeForm(FlaskForm):
     first_name = StringField("First Name", validators=[DataRequired()])
     last_name = StringField("Last Name", validators=[DataRequired()])
     submit = SubmitField("Delete Employee")
+
 
 class RecordNewJobForm(FlaskForm):
     employee_id = SelectField("Employee", coerce=int, validators=[DataRequired()])

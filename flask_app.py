@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
 
 from forms import RegistrationForm, LoginForm, SearchForm, NewEmployerForm, EditEmployerForm,\
-    RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm
+    RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm, EditEmployeeForm, DeleteEmployeeForm
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_mail import Mail, Message
 from cryptography.fernet import Fernet
@@ -241,12 +241,18 @@ def admin():
     employer_form = NewEmployerForm()
     edit_employer_form = EditEmployerForm()
     delete_employer_form = DeleteEmployerForm()
+    add_employee_form = AddEmployeeForm()
+    edit_employee_form = EditEmployeeForm()
+    delete_employee_form = DeleteEmployeeForm()
     relation_form = RelationForm()
     add_admin_form = AddAdminForm()
     return render_template("admin.html", new_employer_form=employer_form,
                            relation_form=relation_form,
                            edit_employer_form=edit_employer_form,
-                           delete_employer_form=delete_employer_form, add_admin_form=add_admin_form)
+                           delete_employer_form=delete_employer_form, add_admin_form=add_admin_form,
+                           add_employee_form=add_employee_form, edit_employee_form=edit_employee_form,
+                           delete_employee_form=delete_employee_form
+                           )
 
 
 @app.route("/employers")
@@ -440,6 +446,56 @@ def add_employee():
     return render_template("add_employee.html", form=form)
 
 
+@app.route("/edit_employee", methods=["POST"])
+@login_required
+def edit_employee():
+    if not current_user.admin:
+        return
+
+    form = EditEmployeeForm()
+    if form.validate_on_submit():
+        employee = Employee.query.filter_by(employee_firstname=form.first_name.data, employee_lastname=form.last_name.data).first()
+        if not employee:
+            flash(f"{form.first_name.data} {form.last_name.data} does not exist", "danger")
+            return redirect(url_for("admin"))
+
+        edited = False
+        if form.phone_number.data:
+            employee.phone_number = form.phone_number.data
+            edited = True
+        if form.employee_address.data:
+            employee.employee_address = form.employee_address.data
+            edited = True
+        if form.email_address.data:
+            employee.email_address = form.email_address.data
+            edited = True
+        db.session.commit()
+
+        if edited:
+            flash("Employee has been successfully updated!", "success")
+    return redirect(url_for("admin"))
+
+
+@app.route("/delete_employee", methods=["POST"])
+@login_required
+def delete_employee():
+    if not current_user.admin:
+        return
+
+    form = DeleteEmployeeForm()
+    if form.validate_on_submit():
+        employee = Employee.query.filter_by(employee_firstname=form.first_name.data, employee_lastname=form.last_name.data).first()
+
+        if not employee:
+            flash(f"{form.first_name.data} {form.last_name.data} does not exist", "danger")
+            return redirect(url_for("admin"))
+
+        db.session.delete(employee)
+        db.session.commit()
+        flash(f"Employee deleted", "success")
+    return redirect(url_for("admin"))
+
+
 @app.route("/record_new_job", methods=["GET", "POST"])
 @login_required
 def record_new_job():
@@ -490,6 +546,7 @@ def record_new_job():
 #   - Need to add the use cases for maintaining Employees so that we can have the relationship between employees and
 #    employers
 #   -
+
 
 if __name__ == "__main__":
     app.run()
