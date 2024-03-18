@@ -490,7 +490,6 @@ def record_new_job():
 #   - Need to add the use cases for maintaining Employees so that we can have the relationship between employees and
 #    employers
 #   -
-@app.route("/new_employee")
 
 if __name__ == "__main__":
     app.run()
