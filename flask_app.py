@@ -507,8 +507,8 @@ def record_new_job():
 
     form = RecordNewJobForm()
     # Fetch all employees and employers by their First and Last name
-    form.employee_id.choices = [(e.id, f"{e.first_name} {e.last_name}") for e in Employee.query.order_by(Employee.first_name).all()]
-    form.employer_id.choices = [(er.id, er.employer_name) for er in Employer.query.order_by(Employer.employer_name).all()]
+    form.employee_id.choices = [(employee.id, f"{employee.first_name} {employee.last_name}") for employee in Employee.query.order_by(Employee.first_name).all()]
+    form.employer_id.choices = [(employer.id, employer.employer_name) for employer in Employer.query.order_by(Employer.employer_name).all()]
 
     if form.validate_on_submit():
         employee_id = form.employee_id.data
