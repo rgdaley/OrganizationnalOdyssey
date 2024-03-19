@@ -18,6 +18,7 @@
         <li><a data-toggle="tab" href="#deleteemployee" class="btn btn-outline-info border">Delete Employee</a></li>
         <li><a data-toggle="tab" href="#addrelation" class="btn btn-outline-info border">Add Employer Relation</a></li>
         <li><a data-toggle="tab" href="#addadmin" class="btn btn-outline-info border">Add Admin</a></li>
+        <li><a data-toggle="tab" href="#recordnewjob" class="btn btn-outline-info border">Record New Job</a></li>
     </ul>
 
     <div class="tab-content">
@@ -353,5 +354,42 @@
             </form>
         </div>
     </div>
+    <div id="recordnewjob" class="tab-pane">
+    <div class="border shadow p-3 mb-5 bg-white rounded">
+        <form method="POST" action="{{ url_for('record_new_job') }}">
+            {{ record_new_job_form.hidden_tag() }}
+            <legend class="border-bottom mb-4">Record New Job</legend>
+
+            <div class="form-group">
+                {{ record_new_job_form.employee_id.label(class="form-control-label") }}
+                {{ record_new_job_form.employee_id(class="form-control form-control-lg") }}
+            </div>
+
+            <div class="form-group">
+                {{ record_new_job_form.employer_id.label(class="form-control-label") }}
+                {{ record_new_job_form.employer_id(class="form-control form-control-lg") }}
+            </div>
+
+            <div class="form-group">
+                {{ record_new_job_form.jobTitle.label(class="form-control-label") }}
+                {{ record_new_job_form.jobTitle(class="form-control form-control-lg") }}
+            </div>
+
+            <div class="form-group">
+                {{ record_new_job_form.startDate.label(class="form-control-label") }}
+                {{ record_new_job_form.startDate(class="form-control form-control-lg") }}
+            </div>
+
+            <div class="form-group">
+                {{ record_new_job_form.endDate.label(class="form-control-label") }}
+                {{ record_new_job_form.endDate(class="form-control form-control-lg") }}
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                {{ record_new_job_form.submit(class="btn btn-outline-info border rounded") }}
+            </div>
+        </form>
     </div>
+</div>
+</div>
 {% endblock content %}

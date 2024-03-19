@@ -7,7 +7,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
 
 from forms import RegistrationForm, LoginForm, SearchForm, NewEmployerForm, EditEmployerForm,\
-    RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm, EditEmployeeForm, DeleteEmployeeForm
+    RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm, EditEmployeeForm,\
+    DeleteEmployeeForm
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_mail import Mail, Message
 from cryptography.fernet import Fernet
@@ -246,12 +247,13 @@ def admin():
     delete_employee_form = DeleteEmployeeForm()
     relation_form = RelationForm()
     add_admin_form = AddAdminForm()
+    record_new_job_form = RecordNewJobForm()
     return render_template("admin.html", new_employer_form=employer_form,
                            relation_form=relation_form,
                            edit_employer_form=edit_employer_form,
                            delete_employer_form=delete_employer_form, add_admin_form=add_admin_form,
                            add_employee_form=add_employee_form, edit_employee_form=edit_employee_form,
-                           delete_employee_form=delete_employee_form
+                           delete_employee_form=delete_employee_form, record_new_job_form=record_new_job_form
                            )
 
 
