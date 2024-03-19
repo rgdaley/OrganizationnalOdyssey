@@ -541,7 +541,6 @@ def record_new_job():
             flash("New job record added successfully!", "success")
 
         return redirect(url_for("admin"))
-    return render_template("record_new_job.html", form=form)
 
 #       NEED TO ADD:
 #   - HTML documents for adding employees, recording new jobs, etc.
