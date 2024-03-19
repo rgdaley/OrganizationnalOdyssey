@@ -542,6 +542,17 @@ def record_new_job():
 
         return redirect(url_for("admin"))
 
+
+@app.route("/employees")
+@login_required
+def employees():
+    all_employees = Employee.query.all()
+    employee_descriptions = []
+    for employee in all_employees:
+        employee_description = employee.description if employee.description != "" else "No Description"
+        employee_description = (employee.description[:50] + "...") if len(employee.description) > 50 else employee.description
+        employee_descriptions.append(employee_description)
+    return render_template("employees.html", all_employees=all_employees, employee_descriptions=employee_descriptions)
 #       NEED TO ADD:
 #   - HTML documents for adding employees, recording new jobs, etc.
 #   - Need to add the use cases for maintaining Employees so that we can have the relationship between employees and
