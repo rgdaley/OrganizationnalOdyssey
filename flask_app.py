@@ -501,14 +501,11 @@ def delete_employee():
 @app.route("/record_new_job", methods=["GET", "POST"])
 @login_required
 def record_new_job():
-    if not current_user.admin:
-        flash("Unauthorized Access", "danger")
-        return redirect(url_for("home"))
 
     form = RecordNewJobForm()
     # Fetch all employees and employers by their First and Last name
-    form.employee_id.choices = [(form.employee.id, f"{form.employee.first_name} {form.employee.last_name}") for employee in Employee.query.order_by(Employee.first_name).all()]
-    form.employer_id.choices = [(form.employer.id, form.employer.employer_name) for employer in Employer.query.order_by(Employer.employer_name).all()]
+    form.employee_id.choices = [(employee.id, f"{employee.first_name} {employee.last_name}") for employee in Employee.query.order_by(Employee.first_name).all()]
+    form.employer_id.choices = [(employer.id, employer.employer_name) for employer in Employer.query.order_by(Employer.employer_name).all()]
 
     if form.validate_on_submit():
         employee_id = form.employee_id.data
