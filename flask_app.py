@@ -77,8 +77,8 @@ class EmployeeEmploymentRecord(db.Model):
     jobTitle = db.Column(db.String(60), nullable=False)
     startDate = db.Column(db.DateTime)
     endDate = db.Column(db.DateTime)
-    securityClearance = db.Column(db.String(60), nullable=False)
-    payGrade = db.Column(db.String(60), nullable=False)
+    #securityClearance = db.Column(db.String(60), nullable=False)
+    #payGrade = db.Column(db.String(60), nullable=False)
     employerAddress = db.Column(db.String(60), nullable=False)
 
 class Employee(db.Model):
