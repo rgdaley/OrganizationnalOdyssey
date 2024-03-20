@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, PasswordField, SubmitField, DateField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional
 
-from flask_app import Employer, Employee
 
 
 class RegistrationForm(FlaskForm):
@@ -82,8 +81,8 @@ class DeleteEmployeeForm(FlaskForm):
 
 
 class RecordNewJobForm(FlaskForm):
-    employee_id = SelectField("Employee", choices=[(employee.id, f"{employee.first_name} {employee.last_name}") for employee in Employee.query.order_by(Employee.first_name).all()], coerce=int, validators=[DataRequired()])
-    employer_id = SelectField("Employer", choices=[(employer.id, employer.employer_name) for employer in Employer.query.order_by(Employer.employer_name).all()], coerce=int, validators=[DataRequired()])
+    employee_id = StringField("Employee", validators=[DataRequired()])
+    employer_id = StringField("Employer", validators=[DataRequired()])
     jobTitle = StringField("Job Title", validators=[DataRequired()])
     startDate = DateField("Start Date", validators=[DataRequired()], format='%Y-%m-%d')
     endDate = DateField("End Date", validators=[Optional()], format='%Y-%m-%d')
