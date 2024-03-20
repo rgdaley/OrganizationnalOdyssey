@@ -79,7 +79,7 @@ class EmployeeEmploymentRecord(db.Model):
     endDate = db.Column(db.DateTime)
     #securityClearance = db.Column(db.String(60), nullable=False)
     #payGrade = db.Column(db.String(60), nullable=False)
-    employerAddress = db.Column(db.String(60), nullable=False)
+    #employerAddress = db.Column(db.String(60), nullable=False)
 
 class Employee(db.Model):
     __tablename__ = "employee"
