@@ -505,21 +505,21 @@ def delete_employee():
 def record_new_job():
     form = RecordNewJobForm()
 
-    # Populate select fields with choices
-    form.employee_id.choices = [(e.id, f"{e.first_name} {e.last_name}") for e in
-                                Employee.query.order_by(Employee.first_name, Employee.last_name).all()]
-    form.employer_id.choices = [(er.id, er.employer_name) for er in
-                                Employer.query.order_by(Employer.employer_name).all()]
-
     if form.validate_on_submit():
-        # Directly use the selected employee and employer IDs from the form
-        employee_id = form.employee_id.data
-        employer_id = form.employer_id.data
+        employee = Employee.query.filter_by(first_name=form.employee_first_name.data, last_name=form.employee_last_name.data).first()
+        employer = Employer.query.filter_by(employer_name=form.employer_name.data).first()
 
-        # Rest of the form processing remains unchanged
+        if not employee:
+            flash(f"Employee {form.employee_first_name.data} {form.employee_last_name.data} not found.", "danger")
+            return redirect(url_for("record_new_job"))
+
+        if not employer:
+            flash(f"Employer {form.employer_name.data} not found.", "danger")
+            return redirect(url_for("record_new_job"))
+
         existing_record = EmployeeEmploymentRecord.query.filter(
-            EmployeeEmploymentRecord.theEmployee == employee_id,
-            EmployeeEmploymentRecord.theEmployer == employer_id,
+            EmployeeEmploymentRecord.theEmployee == employee.id,
+            EmployeeEmploymentRecord.theEmployer == employer.id,
             EmployeeEmploymentRecord.jobTitle == form.jobTitle.data,
             or_(
                 EmployeeEmploymentRecord.startDate <= form.endDate.data,
@@ -531,8 +531,8 @@ def record_new_job():
             flash("An employment record with similar details already exists.", "danger")
         else:
             new_job_record = EmployeeEmploymentRecord(
-                theEmployee=employee_id,
-                theEmployer=employer_id,
+                theEmployee=employee.id,
+                theEmployer=employer.id,
                 jobTitle=form.jobTitle.data,
                 startDate=form.startDate.data,
                 endDate=form.endDate.data

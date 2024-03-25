@@ -347,36 +347,55 @@
     <div id="recordnewjob" class="tab-pane">
     <div class="border shadow p-3 mb-5 bg-white rounded">
         <form method="POST" action="{{ url_for('record_new_job') }}">
-            {{ record_new_job_form.hidden_tag() }}
+            {{ form.hidden_tag() }}
             <legend class="border-bottom mb-4">Record New Job</legend>
 
             <div class="form-group">
-                {{ record_new_job_form.employee_id.label(class="form-control-label") }}
-                {{ record_new_job_form.employee_id(class="form-control form-control-lg", choices=record_new_job_form.employee_id.choices) }}
+                {{ form.employee_first_name.label(class="form-control-label") }}
+                {% if form.employee_first_name.errors %}
+                    {{ form.employee_first_name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.employee_first_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.employee_first_name(class="form-control form-control-lg") }}
+                {% endif %}
             </div>
 
             <div class="form-group">
-                {{ record_new_job_form.employer_id.label(class="form-control-label") }}
-                {{ record_new_job_form.employer_id(class="form-control form-control-lg", choices=record_new_job_form.employer_id.choices) }}
+                {{ form.employee_last_name.label(class="form-control-label") }}
+                {% if form.employee_last_name.errors %}
+                    {{ form.employee_last_name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.employee_last_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.employee_last_name(class="form-control form-control-lg") }}
+                {% endif %}
             </div>
 
             <div class="form-group">
-                {{ record_new_job_form.jobTitle.label(class="form-control-label") }}
-                {{ record_new_job_form.jobTitle(class="form-control form-control-lg") }}
+                {{ form.employer_name.label(class="form-control-label") }}
+                {% if form.employer_name.errors %}
+                    {{ form.employer_name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.employer_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.employer_name(class="form-control form-control-lg") }}
+                {% endif %}
             </div>
 
-            <div class="form-group">
-                {{ record_new_job_form.startDate.label(class="form-control-label") }}
-                {{ record_new_job_form.startDate(class="form-control form-control-lg") }}
-            </div>
-
-            <div class="form-group">
-                {{ record_new_job_form.endDate.label(class="form-control-label") }}
-                {{ record_new_job_form.endDate(class="form-control form-control-lg") }}
-            </div>
+            <!-- Rest of the form fields -->
 
             <div class="form-group mt-3 mb-3">
-                {{ record_new_job_form.submit(class="btn btn-outline-info border rounded") }}
+                {{ form.submit(class="btn btn-outline-info border rounded") }}
             </div>
         </form>
     </div>

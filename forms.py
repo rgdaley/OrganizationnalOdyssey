@@ -81,8 +81,9 @@ class DeleteEmployeeForm(FlaskForm):
 
 
 class RecordNewJobForm(FlaskForm):
-    employee_id = SelectField("Employee", coerce=int, validators=[DataRequired()])
-    employer_id = SelectField("Employer", coerce=int, validators=[DataRequired()])
+    employee_first_name = StringField("Employee First Name", validators=[DataRequired()])
+    employee_last_name = StringField("Employee Last Name", validators=[DataRequired()])
+    employer_name = StringField("Employer Name", validators=[DataRequired()])
     jobTitle = StringField("Job Title", validators=[DataRequired()])
     startDate = DateField("Start Date", validators=[DataRequired()], format='%Y-%m-%d')
     endDate = DateField("End Date", validators=[Optional()], format='%Y-%m-%d')
