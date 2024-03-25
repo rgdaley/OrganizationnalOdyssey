@@ -500,6 +500,8 @@ def delete_employee():
     return redirect(url_for("admin"))
 
 
+from sqlalchemy import or_, and_
+
 @app.route("/record_new_job", methods=["GET", "POST"])
 @login_required
 def record_new_job():
@@ -517,25 +519,38 @@ def record_new_job():
             flash(f"Employer {form.employer_name.data} not found.", "danger")
             return redirect(url_for("record_new_job"))
 
-        existing_record = EmployeeEmploymentRecord.query.filter(
+        # Start building the query
+        query = EmployeeEmploymentRecord.query.filter(
             EmployeeEmploymentRecord.theEmployee == employee.id,
             EmployeeEmploymentRecord.theEmployer == employer.id,
-            EmployeeEmploymentRecord.jobTitle == form.jobTitle.data,
-            or_(
-                EmployeeEmploymentRecord.startDate <= form.endDate.data,
-                EmployeeEmploymentRecord.endDate >= form.startDate.data
+            EmployeeEmploymentRecord.jobTitle == form.jobTitle.data
+        )
+
+        # Adjust query based on whether endDate is provided
+        if form.endDate.data:
+            query = query.filter(
+                or_(
+                    EmployeeEmploymentRecord.startDate <= form.endDate.data,
+                    EmployeeEmploymentRecord.endDate >= form.startDate.data
+                )
             )
-        ).first()
+        else:
+            query = query.filter(
+                EmployeeEmploymentRecord.startDate <= form.startDate.data
+            )
+
+        existing_record = query.first()
 
         if existing_record:
             flash("An employment record with similar details already exists.", "danger")
         else:
+            # Assuming startDate is always provided
             new_job_record = EmployeeEmploymentRecord(
                 theEmployee=employee.id,
                 theEmployer=employer.id,
                 jobTitle=form.jobTitle.data,
                 startDate=form.startDate.data,
-                endDate=form.endDate.data
+                endDate=form.endDate.data if form.endDate.data else None
             )
             db.session.add(new_job_record)
             db.session.commit()
