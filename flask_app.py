@@ -13,6 +13,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_mail import Mail, Message
 from cryptography.fernet import Fernet
 
+
 app = Flask(__name__)
 
 
@@ -502,17 +503,20 @@ def delete_employee():
 @app.route("/record_new_job", methods=["GET", "POST"])
 @login_required
 def record_new_job():
-
     form = RecordNewJobForm()
-    # Fetch all employees and employers by their First and Last name
-    form.employee_id.choices = [(employee.id, f"{employee.first_name} {employee.last_name}") for employee in Employee.query.order_by(Employee.first_name).all()]
-    form.employer_id.choices = [(employer.id, employer.employer_name) for employer in Employer.query.order_by(Employer.employer_name).all()]
+
+    # Populate select fields with choices
+    form.employee_id.choices = [(e.id, f"{e.first_name} {e.last_name}") for e in
+                                Employee.query.order_by(Employee.first_name, Employee.last_name).all()]
+    form.employer_id.choices = [(er.id, er.employer_name) for er in
+                                Employer.query.order_by(Employer.employer_name).all()]
 
     if form.validate_on_submit():
+        # Directly use the selected employee and employer IDs from the form
         employee_id = form.employee_id.data
         employer_id = form.employer_id.data
 
-        # Checking for duplicate data
+        # Rest of the form processing remains unchanged
         existing_record = EmployeeEmploymentRecord.query.filter(
             EmployeeEmploymentRecord.theEmployee == employee_id,
             EmployeeEmploymentRecord.theEmployer == employer_id,
@@ -523,7 +527,6 @@ def record_new_job():
             )
         ).first()
 
-        # If duplicate data is found we flash this message
         if existing_record:
             flash("An employment record with similar details already exists.", "danger")
         else:
@@ -539,6 +542,8 @@ def record_new_job():
             flash("New job record added successfully!", "success")
 
         return redirect(url_for("admin"))
+
+    return render_template("record_new_job.html", form=form)
 
 
 @app.route("/employees")
