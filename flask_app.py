@@ -458,7 +458,7 @@ def edit_employee():
 
     form = EditEmployeeForm()
     if form.validate_on_submit():
-        employee = Employee.query.filter_by(employee_firstname=form.first_name.data, employee_lastname=form.last_name.data).first()
+        employee = Employee.query.filter_by(first_name=form.first_name.data, last_name=form.last_name.data).first()
         if not employee:
             flash(f"{form.first_name.data} {form.last_name.data} does not exist", "danger")
             return redirect(url_for("admin"))
@@ -488,7 +488,7 @@ def delete_employee():
 
     form = DeleteEmployeeForm()
     if form.validate_on_submit():
-        employee = Employee.query.filter_by(employee_firstname=form.first_name.data, employee_lastname=form.last_name.data).first()
+        employee = Employee.query.filter_by(first_name=form.first_name.data, last_name=form.last_name.data).first()
 
         if not employee:
             flash(f"{form.first_name.data} {form.last_name.data} does not exist", "danger")
