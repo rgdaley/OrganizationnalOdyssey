@@ -255,7 +255,7 @@ def admin():
                            edit_employer_form=edit_employer_form,
                            delete_employer_form=delete_employer_form, add_admin_form=add_admin_form,
                            add_employee_form=add_employee_form, edit_employee_form=edit_employee_form,
-                           delete_employee_form=delete_employee_form, record_new_job_form=record_new_job_form
+                           delete_employee_form=delete_employee_form, form=record_new_job_form
                            )
 
 
