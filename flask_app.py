@@ -558,6 +558,9 @@ def record_new_job():
 
         return redirect(url_for("admin"))
 
+    else:
+        flash("Error in form, please correct and retry submission.", "danger")
+
     return render_template("record_new_job.html", form=form)
 
 
