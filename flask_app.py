@@ -502,15 +502,18 @@ def delete_employee():
 
 from sqlalchemy import or_, and_
 
+
 @app.route("/record_new_job", methods=["GET", "POST"])
 @login_required
 def record_new_job():
-    form = RecordNewJobForm()
+    form = RecordNewJobForm()  # Initializing the form to record new job
 
-    if form.validate_on_submit():
+    if form.validate_on_submit():  # Checks if the form is submitted and validated
+        # Fetching employee and employer from the database based on form input
         employee = Employee.query.filter_by(first_name=form.employee_first_name.data, last_name=form.employee_last_name.data).first()
         employer = Employer.query.filter_by(employer_name=form.employer_name.data).first()
 
+        # If employee or employer is not found, flash this message and redirect
         if not employee:
             flash(f"Employee {form.employee_first_name.data} {form.employee_last_name.data} not found.", "danger")
             return redirect(url_for("record_new_job"))
@@ -519,7 +522,7 @@ def record_new_job():
             flash(f"Employer {form.employer_name.data} not found.", "danger")
             return redirect(url_for("record_new_job"))
 
-        # Start building the query
+        # Start building the query to check for existing employment record
         query = EmployeeEmploymentRecord.query.filter(
             EmployeeEmploymentRecord.theEmployee == employee.id,
             EmployeeEmploymentRecord.theEmployer == employer.id,
@@ -534,17 +537,17 @@ def record_new_job():
                     EmployeeEmploymentRecord.endDate >= form.startDate.data
                 )
             )
-        else:
+        else:  # If no end date, ensure records start date is on or before forms start date
             query = query.filter(
                 EmployeeEmploymentRecord.startDate <= form.startDate.data
             )
 
-        existing_record = query.first()
+        existing_record = query.first()  # If a matching record exists flash this message
 
         if existing_record:
             flash("An employment record with similar details already exists.", "danger")
         else:
-            # Assuming startDate is always provided
+            # Create a new job record with form data
             new_job_record = EmployeeEmploymentRecord(
                 theEmployee=employee.id,
                 theEmployer=employer.id,
@@ -552,8 +555,8 @@ def record_new_job():
                 startDate=form.startDate.data,
                 endDate=form.endDate.data if form.endDate.data else None
             )
-            db.session.add(new_job_record)
-            db.session.commit()
+            db.session.add(new_job_record)  # Add a new record to session
+            db.session.commit()  # Committing to save the record
             flash("New job record added successfully!", "success")
 
         return redirect(url_for("admin"))

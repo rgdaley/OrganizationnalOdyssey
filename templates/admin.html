@@ -345,11 +345,14 @@
         </div>
     </div>
     <div id="recordnewjob" class="tab-pane">
+        <!-- Container for the new job record form with some styling -->
     <div class="border shadow p-3 mb-5 bg-white rounded">
+        <!-- Form definition, POST method, action set to the URL for 'record_new_job' route -->
         <form method="POST" action="{{ url_for('record_new_job') }}">
-            {{ form.hidden_tag() }}
+            {{ form.hidden_tag() }}  <!-- Generates CSRF token hidden field for form validation -->
             <legend class="border-bottom mb-4">Record New Job</legend>
 
+             <!-- Form group for employee's first name with validation feedback -->
             <div class="form-group">
                 {{ form.employee_first_name.label(class="form-control-label") }}
                 {% if form.employee_first_name.errors %}
@@ -364,6 +367,7 @@
                 {% endif %}
             </div>
 
+             <!-- Similar structure for employee's last name with validation feedback -->
             <div class="form-group">
                 {{ form.employee_last_name.label(class="form-control-label") }}
                 {% if form.employee_last_name.errors %}
@@ -378,6 +382,7 @@
                 {% endif %}
             </div>
 
+            <!-- Employer name input field with validation feedback -->
             <div class="form-group">
                 {{ form.employer_name.label(class="form-control-label") }}
                 {% if form.employer_name.errors %}
@@ -392,6 +397,7 @@
                 {% endif %}
             </div>
 
+            <!-- Job title input field with validation feedback -->
             <div class="form-group">
                 {{ form.jobTitle.label(class="form-control-label") }}
                 {% if form.jobTitle.errors %}
@@ -406,6 +412,7 @@
                 {% endif %}
             </div>
 
+            <!-- Start date input field with validation feedback -->
             <div class="form-group">
                 {{ form.startDate.label(class="form-control-label") }}
                 {% if form.startDate.errors %}
@@ -420,6 +427,7 @@
                 {% endif %}
             </div>
 
+            <!-- End date input field with validation feedback (optional) -->
             <div class="form-group">
                 {{ form.endDate.label(class="form-control-label") }}
                 {% if form.endDate.errors %}
@@ -434,6 +442,7 @@
                 {% endif %}
             </div>
 
+            <!-- Submit button for the form -->
             <div class="form-group mt-3 mb-3">
                 {{ form.submit(class="btn btn-outline-info border rounded") }}
             </div>
