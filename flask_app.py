@@ -572,11 +572,6 @@ def record_new_job():
 def employees():
     all_employees = Employee.query.all()
     return render_template("employees.html", all_employees=all_employees)
-#       NEED TO ADD:
-#   - HTML documents for adding employees, recording new jobs, etc.
-#   - Need to add the use cases for maintaining Employees so that we can have the relationship between employees and
-#    employers
-#   -
 
 
 if __name__ == "__main__":
