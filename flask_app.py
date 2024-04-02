@@ -573,6 +573,12 @@ def employees():
     all_employees = Employee.query.all()
     return render_template("employees.html", all_employees=all_employees)
 
+# Still Needed
+# def institutions, def addInstituion, def removeInstitution, def editInstitution, and def addDegreeOrCertification #Jenn
+# add institution page #Gavin
+# update admin page to add forms #Gavin
+# update forms.py to include a addInstituion removeInstitution editInstitution and addDegreeOrCertification #Jenn
+# def addEmployeeCertificationForm, update admin page to add form for EmployeeCertificationForm, update forms.py #Jenn
 
 if __name__ == "__main__":
     app.run()
