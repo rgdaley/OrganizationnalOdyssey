@@ -95,3 +95,36 @@ class RecordNewJobForm(FlaskForm):
 # 2. RemoveEmployeeForm (I am not sure if you really need this or not. I would think you would need this form
 # to select which employee to remove.)
 # 3.
+
+#----------------------------
+class AddInstitutionForm(FlaskForm):
+    institution_name = StringField("Institution Name", validators=[DataRequired()])
+    auth_cert = StringField("Authorized Certifications", validators=[DataRequired()])
+    phone_number = StringField("Phone Number", validators=[DataRequired(), Length(min=10, max=15)])
+    institution_address = StringField("Address", validators=[DataRequired()])
+    email_address = StringField("Email Address", validators=[DataRequired(), Email()])
+    submit = SubmitField("Add Institution")
+
+    #----------------------------
+class EditInstitutionForm(FlaskForm):
+        institution_name = StringField("Institution Name", validators=[DataRequired()])
+        auth_cert = StringField("Authorized Certification", validators=[DataRequired()])
+        phone_number = StringField("Phone Number", validators=[DataRequired(), Length(min=10, max=15)])
+        institution_address = StringField("Address", validators=[DataRequired()])
+        email_address = StringField("Email Address", validators=[DataRequired(), Email()])
+        submit = SubmitField("Edit Institutino")
+    #---------------------------------
+
+class DeleteInstitutionForm(FlaskForm):
+    institution_name = StringField("Institution Name", validators=[DataRequired()])
+    auth_cert = StringField("Authorized Certification", validators=[DataRequired()])
+    submit = SubmitField("Delete Institution")
+
+    #-----------------
+class AddDegreeOrCertificationForm(FlaskForm):
+        newDegreeOrCertification = StringField( "Degree or Certification", validators=[DataRequired()])
+        isDegree = BooleanField("Degree?",validators=[DataRequired()])
+        isCertification = BooleanField("Certification?",validators=[DataRequired()])
+        degreeType = StringField("Degree Type",validators=[DataRequired()])
+        submit = SubmitField('Add')
+

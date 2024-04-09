@@ -6,9 +6,9 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
 
-from forms import RegistrationForm, LoginForm, SearchForm, NewEmployerForm, EditEmployerForm,\
-    RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm, EditEmployeeForm,\
-    DeleteEmployeeForm
+from forms import RegistrationForm, LoginForm, SearchForm, NewEmployerForm, EditEmployerForm, \
+    RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm, EditEmployeeForm, \
+    DeleteEmployeeForm, AddInstitutionForm, EditInstitutionForm, DeleteInstitutionForm, AddDegreeOrCertificationForm, \
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_mail import Mail, Message
 from cryptography.fernet import Fernet
@@ -574,11 +574,101 @@ def employees():
     return render_template("employees.html", all_employees=all_employees)
 
 # Still Needed
-# def institutions, def addInstituion, def removeInstitution, def editInstitution, and def addDegreeOrCertification #Jenn
+# def institutions, def addInstitution, def removeInstitution, def editInstitution, and def addDegreeOrCertification #Jenn
 # add institution page #Gavin
 # update admin page to add forms #Gavin
-# update forms.py to include a addInstituion removeInstitution editInstitution and addDegreeOrCertification #Jenn
+# update forms.py to include a addInstitution removeInstitution editInstitution and addDegreeOrCertification #Jenn
 # def addEmployeeCertificationForm, update admin page to add form for EmployeeCertificationForm, update forms.py #Jenn
 
 if __name__ == "__main__":
     app.run()
+#J
+@app.route("/add_institution", methods=["GET", "POST"])
+@login_required
+def add_institution():
+    if not current_user.admin:
+        flash("Unauthorized Access", "danger")
+        return redirect(url_for("home"))
+    form = AddInstitutionForm()
+    if form.validate_on_submit():
+        new_institution = Institution(institutionName=form.institution_name.data, auth_cert=form.auth_cert.data,
+                               # phone_number=form.phone_number.data, institution_address=form.institution_address.data,
+                               # email_address=form.email_address.data)
+        db.session.add(new_institution)
+        db.session.commit()
+        flash("Institution added successfully!", "success")
+        return redirect(url_for("admin"))
+    return render_template("add_institution.html", form=form)
+#-----------------------------------------
+
+@app.route("/edit_institution", methods=["POST"])
+@login_required
+def edit_institution():
+    if not current_user.admin:
+        return
+
+    form = EditInstitutionForm()
+    if form.validate_on_submit():
+        institution = Institution.query.filter_by(institutionName=form.institution_name.data, auth_cert=form.auth_cert.data).first()
+        if not institution:
+            flash(f"{form.institution_name.data} {form.auth_cert.data} does not exist", "danger")
+            return redirect(url_for("admin"))
+
+        edited = False
+        if form.phone_number.data:
+            institution.phone_number = form.phone_number.data
+            edited = True
+        if form.institution_address.data:
+            institution.institution_address = form.institution_address.data
+            edited = True
+        if form.email_address.data:
+            institution.email_address = form.email_address.data
+            edited = True
+        db.session.commit()
+
+        if edited:
+            flash("Institution has been successfully updated!", "success")
+    return redirect(url_for("admin"))
+
+#-----------------------------
+@app.route("/delete_institution", methods=["POST"])
+@login_required
+def delete_institution():
+    if not current_user.admin:
+        return
+
+    form = DeleteInstitutionForm()
+    if form.validate_on_submit():
+        institution = Institution.query.filter_by(institution_name=form.institution_name.data, auth_cert=form.auth_cert.data).first()
+
+        if not institution:
+            flash(f"{form.institutionName.data} {form.auth_cert.data} does not exist", "danger")
+            return redirect(url_for("admin"))
+
+        db.session.delete(institution)
+        db.session.commit()
+        flash("Institution deleted", "success")
+    return redirect(url_for("admin"))
+
+
+from sqlalchemy import or_, and_
+
+#-----------------------------------------
+@app.route("/add_DegreeOrCertification", methods=["GET", "POST"])
+@login_required
+def add_DegreeOrCertification(isCertification, isDegree, degreeType):
+    if not current_user.admin:
+        flash("Unauthorized Access", "danger")
+        return redirect(url_for("home"))
+    form = addDegreeOrCertification()
+    if form.validate_on_submit():
+        new_degreeOrCertification = Institution(degreeOrCertificationName:=form.degreeOrCertificationName.data,
+                                degreeType=form.degreeType.data,)
+        is_degree=form.isDegree.data
+        is_certification = form.isCertification.data
+
+        db.session.add(new_degreeorcertification)
+        db.session.commit()
+        flash("Degree of Certification added successfully!", "success")
+        return redirect(url_for("admin"))
+    return render_template("add_DegreeOrCertification.html", form=form)
