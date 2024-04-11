@@ -462,16 +462,16 @@
            {{ add_institution_form.hidden_tag() }}
            <legend class="border-bottom mb-4">Add institution</legend>
            <div class="form-group">
-               {{ add_institution_form.name.label(class="form-control-label") }}
-               {% if add_institution_form.name.errors %}
-                   {{ add_institution_form.name(class="form-control form-control-lg is-invalid") }}
+               {{ add_institution_form.institution_name.label(class="form-control-label") }}
+               {% if add_institution_form.institution_name.errors %}
+                   {{ add_institution_form.institution_name(class="form-control form-control-lg is-invalid") }}
                    <div class="invalid-feedback">
-                       {% for error in add_institution_form.name.errors %}
+                       {% for error in add_institution_form.institution_name.errors %}
                            <span>{{ error }}</span>
                        {% endfor %}
                    </div>
                {% else %}
-                   {{ add_institution_form.name(class="form-control form-control-lg") }}
+                   {{ add_institution_form.institution_name(class="form-control form-control-lg") }}
                {% endif %}
            </div>
 
@@ -490,16 +490,16 @@
 
 
            <div class="form-group">
-               {{ edit_institution_form.name.label(class="form-control-label") }}
-               {% if edit_institution_form.name.errors %}
-                   {{ edit_institution_form.name(class="form-control form-control-lg is-invalid") }}
+               {{ edit_institution_form.institution_name.label(class="form-control-label") }}
+               {% if edit_institution_form.institution_name.errors %}
+                   {{ edit_institution_form.institution_name(class="form-control form-control-lg is-invalid") }}
                    <div class="invalid-feedback">
-                       {% for error in edit_institution_form.name.errors %}
+                       {% for error in edit_institution_form.institution_name.errors %}
                            <span>{{ error }}</span>
                        {% endfor %}
                    </div>
                {% else %}
-                   {{ edit_institution_form.name(class="form-control form-control-lg") }}
+                   {{ edit_institution_form.institution_name(class="form-control form-control-lg") }}
                {% endif %}
            </div>
 
@@ -519,15 +519,15 @@
 
            <div class="form-group">
                {{ delete_institution_form.name.label(class="form-control-label") }}
-               {% if delete_institution_form.name.errors %}
-                   {{ delete_institution_form.name(class="form-control form-control-lg is-invalid") }}
+               {% if delete_institution_form.institution_name.errors %}
+                   {{ delete_institution_form.institution_name(class="form-control form-control-lg is-invalid") }}
                    <div class="invalid-feedback">
-                       {% for error in delete_institution_form.name.errors %}
+                       {% for error in delete_institution_form.institution_name.errors %}
                            <span>{{ error }}</span>
                        {% endfor %}
                    </div>
                {% else %}
-                   {{ delete_institution_form.name(class="form-control form-control-lg") }}
+                   {{ delete_institution_form.institution_name(class="form-control form-control-lg") }}
                {% endif %}
            </div>
 
