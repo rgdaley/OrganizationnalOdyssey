@@ -542,7 +542,7 @@
   <div id="addcertification" class="tab-pane">
   <div class="border shadow p-3 mb-5 bg-white rounded">
       <form method="POST" action="{{ url_for('add_Certification') }}">
-          {{ add_certification_form.hidden_tag() }}
+          {{ add_Certification_form.hidden_tag() }}
           <legend class="border-bottom mb-4">Add certification</legend>
           <div class="form-group">
               {{ add_certification_form.name.label(class="form-control-label") }}
