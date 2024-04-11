@@ -241,12 +241,20 @@ def admin():
     relation_form = RelationForm()
     add_admin_form = AddAdminForm()
     record_new_job_form = RecordNewJobForm()
+    add_institution_form = AddInstitutionForm()
+    edit_institution_form = EditInstitutionForm()
+    delete_institution_form = DeleteInstitutionForm()
+    add_Certification_form = AddCertificationForm()
+
     return render_template("admin.html", new_employer_form=employer_form,
                            relation_form=relation_form,
                            edit_employer_form=edit_employer_form,
                            delete_employer_form=delete_employer_form, add_admin_form=add_admin_form,
                            add_employee_form=add_employee_form, edit_employee_form=edit_employee_form,
-                           delete_employee_form=delete_employee_form, form=record_new_job_form
+                           delete_employee_form=delete_employee_form, form=record_new_job_form,
+                           add_institution_form=add_institution_form, edit_institution_form=edit_institution_form,
+                           delete_institution_form=delete_institution_form,
+                           add_Certification_form=add_Certification_form
                            )
 
 
@@ -649,9 +657,9 @@ def add_Certification():
     if not current_user.admin:
         flash("Unauthorized Access", "danger")
         return redirect(url_for("home"))
-    form = add_Certification()
+    form = AddCertificationForm()
     if form.validate_on_submit():
-        new_Certification = Institution(certificationName:=form.certificationName.data,)
+        new_Certification = Institution(certificationName:=form.new_certification.data,)
 
         db.session.add(new_Certification)
         db.session.commit()
