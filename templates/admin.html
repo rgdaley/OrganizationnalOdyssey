@@ -19,6 +19,9 @@
         <li><a data-toggle="tab" href="#addrelation" class="btn btn-outline-info border">Add Employer Relation</a></li>
         <li><a data-toggle="tab" href="#addadmin" class="btn btn-outline-info border">Add Admin</a></li>
         <li><a data-toggle="tab" href="#recordnewjob" class="btn btn-outline-info border">Record New Job</a></li>
+        <li><a data-toggle="tab" href="#addinstitution" class="btn btn-outline-info border">Add institution</a></li>
+        <li><a data-toggle="tab" href="#editinstitution" class="btn btn-outline-info border">Edit institution</a></li>
+        <li><a data-toggle="tab" href="#deleteinstitution" class="btn btn-outline-info border">Delete institution</a></li>
     </ul>
 
     <div class="tab-content">
@@ -449,5 +452,90 @@
         </form>
     </div>
 </div>
+
+   <div id="addinstitution" class="tab-pane">
+   <div class="border shadow p-3 mb-5 bg-white rounded">
+       <form method="POST" action="{{ url_for('add_institution') }}">
+           {{ add_institution_form.hidden_tag() }}
+           <legend class="border-bottom mb-4">Add institution</legend>
+           <div class="form-group">
+               {{ add_institution_form.name.label(class="form-control-label") }}
+               {% if add_institution_form.name.errors %}
+                   {{ add_institution_form.name(class="form-control form-control-lg is-invalid") }}
+                   <div class="invalid-feedback">
+                       {% for error in add_institution_form.name.errors %}
+                           <span>{{ error }}</span>
+                       {% endfor %}
+                   </div>
+               {% else %}
+                   {{ add_institution_form.name(class="form-control form-control-lg") }}
+               {% endif %}
+           </div>
+
+
+           <div class="form-group mt-3 mb-3">
+               {{ add_institution_form.submit(class="btn btn-outline-info border rounded") }}
+           </div>
+       </form>
+   </div>
+ </div>
+<div id="editinstitution" class="tab-pane">
+   <div class="border shadow p-3 mb-5 bg-white rounded">
+       <form method="POST" action="{{ url_for('edit_institution') }}">
+           {{ edit_institution_form.hidden_tag() }}
+           <legend class="border-bottom mb-4">Edit institution</legend>
+
+
+           <div class="form-group">
+               {{ edit_institution_form.name.label(class="form-control-label") }}
+               {% if edit_institution_form.name.errors %}
+                   {{ edit_institution_form.name(class="form-control form-control-lg is-invalid") }}
+                   <div class="invalid-feedback">
+                       {% for error in edit_institution_form.name.errors %}
+                           <span>{{ error }}</span>
+                       {% endfor %}
+                   </div>
+               {% else %}
+                   {{ edit_institution_form.name(class="form-control form-control-lg") }}
+               {% endif %}
+           </div>
+
+
+           <div class="form-group mt-3 mb-3">
+               {{ edit_institution_form.submit(class="btn btn-outline-info") }}
+           </div>
+       </form>
+   </div>
+</div>
+<div id="deleteinstitution" class="tab-pane">
+   <div class="border shadow p-3 mb-5 bg-white rounded">
+       <form method="POST" action="{{ url_for('delete_institution') }}">
+           {{ delete_institution_form.hidden_tag() }}
+           <legend class="border-bottom mb-4">Delete institution</legend>
+
+
+           <div class="form-group">
+               {{ delete_institution_form.name.label(class="form-control-label") }}
+               {% if delete_institution_form.name.errors %}
+                   {{ delete_institution_form.name(class="form-control form-control-lg is-invalid") }}
+                   <div class="invalid-feedback">
+                       {% for error in delete_institution_form.name.errors %}
+                           <span>{{ error }}</span>
+                       {% endfor %}
+                   </div>
+               {% else %}
+                   {{ delete_institution_form.name(class="form-control form-control-lg") }}
+               {% endif %}
+           </div>
+
+
+           <div class="form-group mt-3 mb-3">
+               {{ delete_institution_form.submit(class="btn btn-outline-info") }}
+           </div>
+       </form>
+   </div>
+</div>
+
+
 </div>
 {% endblock content %}
