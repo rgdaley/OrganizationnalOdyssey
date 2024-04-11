@@ -22,6 +22,9 @@
         <li><a data-toggle="tab" href="#addinstitution" class="btn btn-outline-info border">Add institution</a></li>
         <li><a data-toggle="tab" href="#editinstitution" class="btn btn-outline-info border">Edit institution</a></li>
         <li><a data-toggle="tab" href="#deleteinstitution" class="btn btn-outline-info border">Delete institution</a></li>
+        <li><a data-toggle="tab" href="#addcertification" class="btn btn-outline-info border">Add certification</a></li>
+        <li><a data-toggle="tab" href="#editcertification" class="btn btn-outline-info border">Edit certification</a></li>
+        <li><a data-toggle="tab" href="#deletecertification" class="btn btn-outline-info border">Delete certification</a></li>
     </ul>
 
     <div class="tab-content">
@@ -534,6 +537,99 @@
            </div>
        </form>
    </div>
+</div>
+
+  <div id="addcertification" class="tab-pane">
+  <div class="border shadow p-3 mb-5 bg-white rounded">
+      <form method="POST" action="{{ url_for('add_certification') }}">
+          {{ add_certification_form.hidden_tag() }}
+          <legend class="border-bottom mb-4">Add certification</legend>
+          <div class="form-group">
+              {{ add_certification_form.name.label(class="form-control-label") }}
+              {% if add_certification_form.name.errors %}
+                  {{ add_certification_form.name(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in add_certification_form.name.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ add_certification_form.name(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+
+
+
+
+          <div class="form-group mt-3 mb-3">
+              {{ add_certification_form.submit(class="btn btn-outline-info border rounded") }}
+          </div>
+      </form>
+  </div>
+</div>
+<div id="editcertification" class="tab-pane">
+  <div class="border shadow p-3 mb-5 bg-white rounded">
+      <form method="POST" action="{{ url_for('edit_certification') }}">
+          {{ edit_certification_form.hidden_tag() }}
+          <legend class="border-bottom mb-4">Edit certification</legend>
+
+
+
+
+          <div class="form-group">
+              {{ edit_certification_form.name.label(class="form-control-label") }}
+              {% if edit_certification_form.name.errors %}
+                  {{ edit_certification_form.name(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in edit_certification_form.name.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ edit_certification_form.name(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+
+
+
+
+          <div class="form-group mt-3 mb-3">
+              {{ edit_certification_form.submit(class="btn btn-outline-info") }}
+          </div>
+      </form>
+  </div>
+</div>
+<div id="deletecertification" class="tab-pane">
+  <div class="border shadow p-3 mb-5 bg-white rounded">
+      <form method="POST" action="{{ url_for('delete_certification') }}">
+          {{ delete_certification_form.hidden_tag() }}
+          <legend class="border-bottom mb-4">Delete certification</legend>
+
+
+
+
+          <div class="form-group">
+              {{ delete_certification_form.name.label(class="form-control-label") }}
+              {% if delete_certification_form.name.errors %}
+                  {{ delete_certification_form.name(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in delete_certification_form.name.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ delete_certification_form.name(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+
+
+
+
+          <div class="form-group mt-3 mb-3">
+              {{ delete_certification_form.submit(class="btn btn-outline-info") }}
+          </div>
+      </form>
+  </div>
 </div>
 
 
