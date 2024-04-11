@@ -96,7 +96,7 @@ class RecordNewJobForm(FlaskForm):
 # to select which employee to remove.)
 # 3.
 
-#----------------------------
+
 class AddInstitutionForm(FlaskForm):
     institution_name = StringField("Institution Name", validators=[DataRequired()])
     auth_cert = StringField("Authorized Certifications", validators=[DataRequired()])
@@ -105,23 +105,23 @@ class AddInstitutionForm(FlaskForm):
     email_address = StringField("Email Address", validators=[DataRequired(), Email()])
     submit = SubmitField("Add Institution")
 
-    #----------------------------
+
 class EditInstitutionForm(FlaskForm):
         institution_name = StringField("Institution Name", validators=[DataRequired()])
         auth_cert = StringField("Authorized Certification", validators=[DataRequired()])
         phone_number = StringField("Phone Number", validators=[DataRequired(), Length(min=10, max=15)])
         institution_address = StringField("Address", validators=[DataRequired()])
         email_address = StringField("Email Address", validators=[DataRequired(), Email()])
-        submit = SubmitField("Edit Institutino")
-    #---------------------------------
+        submit = SubmitField("Edit Institution")
+
 
 class DeleteInstitutionForm(FlaskForm):
     institution_name = StringField("Institution Name", validators=[DataRequired()])
     auth_cert = StringField("Authorized Certification", validators=[DataRequired()])
     submit = SubmitField("Delete Institution")
 
-    #-----------------
+
 class AddCertificationForm(FlaskForm):
-        newCertification = StringField( "Certification", validators=[DataRequired()])
+        new_certification = StringField("Certification", validators=[DataRequired()])
         submit = SubmitField('Add')
 

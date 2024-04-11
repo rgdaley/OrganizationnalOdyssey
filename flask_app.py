@@ -246,7 +246,9 @@ def admin():
                            edit_employer_form=edit_employer_form,
                            delete_employer_form=delete_employer_form, add_admin_form=add_admin_form,
                            add_employee_form=add_employee_form, edit_employee_form=edit_employee_form,
-                           delete_employee_form=delete_employee_form, form=record_new_job_form
+                           delete_employee_form=delete_employee_form, form=record_new_job_form,
+                           add_institution_form=AddInstitutionForm, edit_institution_form=EditInstitutionForm,
+                           delete_institution_form=DeleteInstitutionForm,
                            )
 
 
@@ -573,7 +575,8 @@ def employees():
 
 if __name__ == "__main__":
     app.run()
-#J
+
+
 @app.route("/add_institution", methods=["GET", "POST"])
 @login_required
 def add_institution():
@@ -588,7 +591,7 @@ def add_institution():
         flash("Institution added successfully!", "success")
         return redirect(url_for("admin"))
     return render_template("add_institution.html", form=form)
-#-----------------------------------------
+
 
 @app.route("/edit_institution", methods=["POST"])
 @login_required
@@ -619,7 +622,7 @@ def edit_institution():
             flash("Institution has been successfully updated!", "success")
     return redirect(url_for("admin"))
 
-#-----------------------------
+
 @app.route("/delete_institution", methods=["POST"])
 @login_required
 def delete_institution():
@@ -631,7 +634,7 @@ def delete_institution():
         institution = Institution.query.filter_by(institution_name=form.institution_name.data, auth_cert=form.auth_cert.data).first()
 
         if not institution:
-            flash(f"{form.institutionName.data} {form.auth_cert.data} does not exist", "danger")
+            flash(f"{form.institution_name.data} {form.auth_cert.data} does not exist", "danger")
             return redirect(url_for("admin"))
 
         db.session.delete(institution)
@@ -642,19 +645,19 @@ def delete_institution():
 
 from sqlalchemy import or_, and_
 
-#-----------------------------------------
-@app.route("/add_Certification", methods=["GET", "POST"])
+
+@app.route("/add_certification", methods=["GET", "POST"])
 @login_required
-def add_Certification():
+def add_certification():
     if not current_user.admin:
         flash("Unauthorized Access", "danger")
         return redirect(url_for("home"))
-    form = add_Certification()
+    form = add_certification()
     if form.validate_on_submit():
-        new_Certification = Institution(certificationName:=form.certificationName.data,)
+        new_certification = Institution(certificationName := form.certificationName.data,)
 
-        db.session.add(new_Certification)
+        db.session.add(new_certification)
         db.session.commit()
         flash("Certification added successfully!", "success")
         return redirect(url_for("admin"))
-    return render_template("add_Certification.html", form=form)
+    return render_template("add_certification.html", form=form)
