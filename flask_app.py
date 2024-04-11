@@ -658,3 +658,10 @@ def add_Certification():
         flash("Certification added successfully!", "success")
         return redirect(url_for("admin"))
     return render_template("add_Certification.html", form=form)
+
+
+@app.route("/institutions")
+@login_required
+def institutions():
+    institutions = Institution.query.all()
+    return render_template("institutions.html", institutions=institutions)
