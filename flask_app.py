@@ -8,7 +8,7 @@ from sqlalchemy import *
 
 from forms import RegistrationForm, LoginForm, SearchForm, NewEmployerForm, EditEmployerForm, \
     RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm, EditEmployeeForm, \
-    DeleteEmployeeForm, AddInstitutionForm, EditInstitutionForm, DeleteInstitutionForm, AddDegreeOrCertificationForm, \
+    DeleteEmployeeForm, AddInstitutionForm, EditInstitutionForm, DeleteInstitutionForm, AddCertificationForm, \
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_mail import Mail, Message
 from cryptography.fernet import Fernet
@@ -78,9 +78,6 @@ class EmployeeEmploymentRecord(db.Model):
     jobTitle = db.Column(db.String(60), nullable=False)
     startDate = db.Column(db.DateTime)
     endDate = db.Column(db.DateTime)
-    #securityClearance = db.Column(db.String(60), nullable=False)
-    #payGrade = db.Column(db.String(60), nullable=False)
-    #employerAddress = db.Column(db.String(60), nullable=False)
 
 class Employee(db.Model):
     __tablename__ = "employee"
@@ -93,18 +90,11 @@ class Employee(db.Model):
     email_address = db.Column(db.String(60), nullable=False)
     employers = db.relationship('EmployeeEmploymentRecord')
 
-class DegreeOrCertification(db.Model):
-    __tablename__ = "degreeOrCertification"
+class Certification(db.Model):
+    __tablename__ = "certification"
 
     id = db.Column(db.Integer, primary_key=True)
-    degreeOrCertificationName = db.Column(db.String(60), nullable=False)
-    isDegree = db.Column(db.Boolean)
-    isCertification = db.Column(db.Boolean)
-    degreeType = db.Column(db.String(60), nullable=False)
-
-    #__table_args__ = (
-    #    CheckConstraint("isDegree ^ isCertification"),
-    #)
+    CertificationName = db.Column(db.String(60), nullable=False)
 
 class EmployeeCertificationForm(db.Model):
     __tablename__="employeeCertificationForm"
@@ -112,7 +102,7 @@ class EmployeeCertificationForm(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     certAwardedTo = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)    ##may need to be changed to just "employee" and remove '.id' same goes for as follows
     grantingInstitution = db.Column(db.Integer, db.ForeignKey('institution.id'), nullable=False)
-    grantedCertification = db.Column(db.Integer, db.ForeignKey('degreeOrCertification.id'), nullable=False)
+    grantedCertification = db.Column(db.Integer, db.ForeignKey('certification.id'), nullable=False)
     awardDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 class Institution(db.Model):
@@ -591,10 +581,8 @@ def add_institution():
         return redirect(url_for("home"))
     form = AddInstitutionForm()
     if form.validate_on_submit():
-        new_institution = Institution(institutionName=form.institution_name.data, auth_cert=form.auth_cert.data,
-                               # phone_number=form.phone_number.data, institution_address=form.institution_address.data,
-                               # email_address=form.email_address.data)
-        db.session.add(new_institution)
+        new_Institution = Institution(institutionName=form.institution_name.data, auth_cert=form.auth_cert.data,)
+        db.session.add(new_Institution)
         db.session.commit()
         flash("Institution added successfully!", "success")
         return redirect(url_for("admin"))
@@ -654,21 +642,18 @@ def delete_institution():
 from sqlalchemy import or_, and_
 
 #-----------------------------------------
-@app.route("/add_DegreeOrCertification", methods=["GET", "POST"])
+@app.route("/add_Certification", methods=["GET", "POST"])
 @login_required
-def add_DegreeOrCertification(isCertification, isDegree, degreeType):
+def add_Certification():
     if not current_user.admin:
         flash("Unauthorized Access", "danger")
         return redirect(url_for("home"))
-    form = addDegreeOrCertification()
+    form = add_Certification()
     if form.validate_on_submit():
-        new_degreeOrCertification = Institution(degreeOrCertificationName:=form.degreeOrCertificationName.data,
-                                degreeType=form.degreeType.data,)
-        is_degree=form.isDegree.data
-        is_certification = form.isCertification.data
+        new_Certification = Institution(certificationName:=form.certificationName.data,)
 
-        db.session.add(new_degreeorcertification)
+        db.session.add(new_Certification)
         db.session.commit()
-        flash("Degree of Certification added successfully!", "success")
+        flash("Certification added successfully!", "success")
         return redirect(url_for("admin"))
-    return render_template("add_DegreeOrCertification.html", form=form)
+    return render_template("add_Certification.html", form=form)

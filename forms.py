@@ -121,10 +121,7 @@ class DeleteInstitutionForm(FlaskForm):
     submit = SubmitField("Delete Institution")
 
     #-----------------
-class AddDegreeOrCertificationForm(FlaskForm):
-        newDegreeOrCertification = StringField( "Degree or Certification", validators=[DataRequired()])
-        isDegree = BooleanField("Degree?",validators=[DataRequired()])
-        isCertification = BooleanField("Certification?",validators=[DataRequired()])
-        degreeType = StringField("Degree Type",validators=[DataRequired()])
+class AddCertificationForm(FlaskForm):
+        newCertification = StringField( "Certification", validators=[DataRequired()])
         submit = SubmitField('Add')
 
