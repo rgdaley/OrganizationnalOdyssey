@@ -688,7 +688,7 @@ def edit_certification():
         db.session.commit()
 
         if edited:
-            flash("Institution has been successfully updated!", "success")
+            flash("Certification has been successfully updated!", "success")
     return redirect(url_for("admin"))
 
 #-----------------------------
