@@ -586,7 +586,8 @@ def employees():
 
 if __name__ == "__main__":
     app.run()
-#J
+
+
 @app.route("/add_institution", methods=["GET", "POST"])
 @login_required
 def add_institution():
@@ -597,7 +598,7 @@ def add_institution():
 
     if form.validate_on_submit():
         new_institution = Institution(
-            institutionName=form.institution_name.data,
+            institution_name=form.institution_name.data,
             auth_cert=form.auth_cert.data,
             phone_number=form.phone_number.data,
             institution_address=form.institution_address.data,
@@ -606,9 +607,9 @@ def add_institution():
         db.session.add(new_institution)
         db.session.commit()
         flash("Institution added successfully!", "success")
-        return redirect(url_for("admin"))  # Redirect to the admin page where forms are handled.
-    return render_template("add_institution.html", form=form)
-#-----------------------------------------
+    return redirect(url_for("admin"))  # Redirect to the admin page where forms are handled.
+   # return render_template("add_institution.html", form=form)
+
 
 @app.route("/edit_institution", methods=["POST"])
 @login_required
