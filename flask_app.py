@@ -8,7 +8,8 @@ from sqlalchemy import *
 
 from forms import RegistrationForm, LoginForm, SearchForm, NewEmployerForm, EditEmployerForm, \
     RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm, EditEmployeeForm, \
-    DeleteEmployeeForm, AddInstitutionForm, EditInstitutionForm, DeleteInstitutionForm, AddCertificationForm
+    DeleteEmployeeForm, AddInstitutionForm, EditInstitutionForm, DeleteInstitutionForm, AddCertificationForm, \
+    DeleteCertificationForm, EditCertificationForm
 
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_mail import Mail, Message
@@ -667,6 +668,48 @@ def add_Certification():
         return redirect(url_for("admin"))
     return render_template("add_Certification.html", form=form)
 
+@app.route("/edit_certification", methods=["POST"])
+@login_required
+def edit_certification():
+    if not current_user.admin:
+        return
+
+    form = EditCertificationForm()
+    if form.validate_on_submit():
+        certification = Certification.query.filter_by(certificationName=form.new_certification.data).first()
+        if not certification:
+            flash(f"{form.new_certification.data} does not exist", "danger")
+            return redirect(url_for("admin"))
+
+        edited = False
+        if form.new_certification.data:
+            certification.new_certification = form.new_certification.data
+            edited = True
+        db.session.commit()
+
+        if edited:
+            flash("Institution has been successfully updated!", "success")
+    return redirect(url_for("admin"))
+
+#-----------------------------
+@app.route("/delete_certification", methods=["POST"])
+@login_required
+def delete_certification():
+    if not current_user.admin:
+        return
+
+    form = DeleteCertificationForm()
+    if form.validate_on_submit():
+        certification = Certification.query.filter_by(certificationName=form.new_certification.data).first()
+
+        if not certification:
+            flash(f"{form.new_certification.data} does not exist", "danger")
+            return redirect(url_for("admin"))
+
+        db.session.delete(certification)
+        db.session.commit()
+        flash("Certification deleted", "success")
+    return redirect(url_for("admin"))
 
 @app.route("/institutions")
 @login_required
