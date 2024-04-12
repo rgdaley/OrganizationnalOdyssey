@@ -600,7 +600,7 @@ def add_institution():
         db.session.commit()
         flash("Institution added successfully!", "success")
         return redirect(url_for("admin"))
-    return render_template("add_institution.html", form=form)
+   # return render_template("add_institution.html", form=form)
 #-----------------------------------------
 
 @app.route("/edit_institution", methods=["POST"])
