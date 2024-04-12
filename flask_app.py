@@ -606,7 +606,11 @@ def add_institution():
         db.session.add(new_institution)
         db.session.commit()
         flash("Institution added successfully!", "success")
-        return redirect(url_for("admin"))  # Redirect to the admin page where forms are handled.
+        return redirect(url_for("admin"))
+
+    else:
+        flash("Error in form, please correct and try resubmitting.", "danger")
+
     return render_template("add_institution.html", form=form)
 
 
