@@ -545,16 +545,16 @@
           {{ add_Certification_form.hidden_tag() }}
           <legend class="border-bottom mb-4">Add certification</legend>
           <div class="form-group">
-              {{ add_Certification_form.name.label(class="form-control-label") }}
-              {% if add_Certification_form.name.errors %}
-                  {{ add_Certification_form.name(class="form-control form-control-lg is-invalid") }}
+              {{ add_Certification_form.new_certification.label(class="form-control-label") }}
+              {% if add_Certification_form.new_certification.errors %}
+                  {{ add_Certification_form.new_certification(class="form-control form-control-lg is-invalid") }}
                   <div class="invalid-feedback">
-                      {% for error in add_Certification_form.name.errors %}
+                      {% for error in add_Certification_form.new_certification.errors %}
                           <span>{{ error }}</span>
                       {% endfor %}
                   </div>
               {% else %}
-                  {{ add_Certification_form.name(class="form-control form-control-lg") }}
+                  {{ add_Certification_form.new_certification(class="form-control form-control-lg") }}
               {% endif %}
           </div>
 
