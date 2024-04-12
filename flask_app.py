@@ -591,11 +591,10 @@ if __name__ == "__main__":
 @app.route("/add_institution", methods=["GET", "POST"])
 @login_required
 def add_institution():
-    form = AddInstitutionForm()
     if not current_user.admin:
         flash("Unauthorized Access", "danger")
         return redirect(url_for("home"))
-
+    form = AddInstitutionForm()
     if form.validate_on_submit():
         new_institution = Institution(
             institution_name=form.institution_name.data,
@@ -607,8 +606,8 @@ def add_institution():
         db.session.add(new_institution)
         db.session.commit()
         flash("Institution added successfully!", "success")
-    return redirect(url_for("admin"))  # Redirect to the admin page where forms are handled.
-   # return render_template("add_institution.html", form=form)
+        return redirect(url_for("admin"))  # Redirect to the admin page where forms are handled.
+    return render_template("add_institution.html", form=form)
 
 
 @app.route("/edit_institution", methods=["POST"])
