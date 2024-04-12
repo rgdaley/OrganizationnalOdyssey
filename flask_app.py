@@ -246,6 +246,7 @@ def admin():
     edit_institution_form = EditInstitutionForm()
     delete_institution_form = DeleteInstitutionForm()
     add_Certification_form = AddCertificationForm()
+    edit_certification_form = EditCertificationForm()
 
     return render_template("admin.html", new_employer_form=employer_form,
                            relation_form=relation_form,
@@ -255,7 +256,8 @@ def admin():
                            delete_employee_form=delete_employee_form, form=record_new_job_form,
                            add_institution_form=add_institution_form, edit_institution_form=edit_institution_form,
                            delete_institution_form=delete_institution_form,
-                           add_Certification_form=add_Certification_form
+                           add_Certification_form=add_Certification_form,
+                           edit_certification_form=edit_certification_form
                            )
 
 
