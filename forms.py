@@ -133,7 +133,7 @@ class EditCertificationForm(FlaskForm):
 class DeleteCertificationForm(FlaskForm):
     new_certification = StringField("Certification", validators=[DataRequired()])
     submit = SubmitField('Add')
-    
+
 
 # class EditInstitutionForm(FlaskForm):
 #    institution_name = StringField("Institution Name", validators=[DataRequired()])
