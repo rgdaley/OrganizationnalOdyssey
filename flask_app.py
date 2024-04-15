@@ -584,6 +584,7 @@ def employees():
 # update forms.py to include a addInstitution removeInstitution editInstitution and addDegreeOrCertification #Jenn
 # def addEmployeeCertificationForm, update admin page to add form for EmployeeCertificationForm, update forms.py #Jenn
 
+
 if __name__ == "__main__":
     app.run()
 
@@ -655,7 +656,7 @@ def delete_institution():
         institution = Institution.query.filter_by(institution_name=form.institution_name.data, auth_cert=form.auth_cert.data).first()
 
         if not institution:
-            flash(f"{form.institutionName.data} {form.auth_cert.data} does not exist", "danger")
+            flash(f"{form.institution_name.data} {form.auth_cert.data} does not exist", "danger")
             return redirect(url_for("admin"))
 
         db.session.delete(institution)
@@ -666,18 +667,18 @@ def delete_institution():
 
 from sqlalchemy import or_, and_
 
-#-----------------------------------------
+
 @app.route("/add_Certification", methods=["GET", "POST"])
 @login_required
-def add_Certification():
+def add_certification():
     if not current_user.admin:
         flash("Unauthorized Access", "danger")
         return redirect(url_for("home"))
     form = AddCertificationForm()
     if form.validate_on_submit():
-        new_Certification = Institution(certificationName:=form.new_certification.data,)
+        new_certification = Institution(certificationName:=form.new_certification.data,)
 
-        db.session.add(new_Certification)
+        db.session.add(new_certification)
         db.session.commit()
         flash("Certification added successfully!", "success")
         return redirect(url_for("admin"))
@@ -693,12 +694,12 @@ def edit_certification():
     if form.validate_on_submit():
         certification = Certification.query.filter_by(certificationName=form.new_certification.data).first()
         if not certification:
-            flash(f"{form.new_certification.data} does not exist", "danger")
+            flash(f"{form.cur_certification.data} does not exist", "danger")
             return redirect(url_for("admin"))
 
         edited = False
-        if form.new_certification.data:
-            certification.new_certification = form.new_certification.data
+        if form.cur_certification.data:
+            certification.new_certification = form.cur_certification.data
             edited = True
         db.session.commit()
 
@@ -706,7 +707,7 @@ def edit_certification():
             flash("Certification has been successfully updated!", "success")
     return redirect(url_for("admin"))
 
-#-----------------------------
+
 @app.route("/delete_certification", methods=["POST"])
 @login_required
 def delete_certification():
@@ -715,16 +716,17 @@ def delete_certification():
 
     form = DeleteCertificationForm()
     if form.validate_on_submit():
-        certification = Certification.query.filter_by(certificationName=form.new_certification.data).first()
+        certification = Certification.query.filter_by(certificationName=form.cur_certification.data).first()
 
         if not certification:
-            flash(f"{form.new_certification.data} does not exist", "danger")
+            flash(f"{form.cur_certification.data} does not exist", "danger")
             return redirect(url_for("admin"))
 
         db.session.delete(certification)
         db.session.commit()
         flash("Certification deleted", "success")
     return redirect(url_for("admin"))
+
 
 @app.route("/institutions")
 @login_required
