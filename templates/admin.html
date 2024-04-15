@@ -575,16 +575,16 @@
 
 
           <div class="form-group">
-              {{ edit_certification_form.name.label(class="form-control-label") }}
-              {% if edit_certification_form.name.errors %}
-                  {{ edit_certification_form.name(class="form-control form-control-lg is-invalid") }}
+              {{ edit_certification_form.new_certification.label(class="form-control-label") }}
+              {% if edit_certification_form.new_certification.errors %}
+                  {{ edit_certification_form.new_certification(class="form-control form-control-lg is-invalid") }}
                   <div class="invalid-feedback">
-                      {% for error in edit_certification_form.name.errors %}
+                      {% for error in edit_certification_form.new_certification.errors %}
                           <span>{{ error }}</span>
                       {% endfor %}
                   </div>
               {% else %}
-                  {{ edit_certification_form.name(class="form-control form-control-lg") }}
+                  {{ edit_certification_form.new_certification(class="form-control form-control-lg") }}
               {% endif %}
           </div>
 
@@ -603,16 +603,16 @@
 
 
           <div class="form-group">
-              {{ delete_certification_form.name.label(class="form-control-label") }}
-              {% if delete_certification_form.name.errors %}
-                  {{ delete_certification_form.name(class="form-control form-control-lg is-invalid") }}
+              {{ delete_certification_form.new_certification.label(class="form-control-label") }}
+              {% if delete_certification_form.new_certification.errors %}
+                  {{ delete_certification_form.new_certification(class="form-control form-control-lg is-invalid") }}
                   <div class="invalid-feedback">
-                      {% for error in delete_certification_form.name.errors %}
+                      {% for error in delete_certification_form.new_certification.errors %}
                           <span>{{ error }}</span>
                       {% endfor %}
                   </div>
               {% else %}
-                  {{ delete_certification_form.name(class="form-control form-control-lg") }}
+                  {{ delete_certification_form.new_certification(class="form-control form-control-lg") }}
               {% endif %}
           </div>
 
