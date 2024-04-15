@@ -8,7 +8,7 @@ from sqlalchemy import *
 
 from forms import RegistrationForm, LoginForm, SearchForm, NewEmployerForm, EditEmployerForm, \
     RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm, EditEmployeeForm, \
-    DeleteEmployeeForm, AddInstitutionForm, EditInstitutionForm, DeleteInstitutionForm, AddCertificationForm, \
+    DeleteEmployeeForm, AddInstitutionForm, DeleteInstitutionForm, AddCertificationForm, \
     DeleteCertificationForm, EditCertificationForm
 
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -243,7 +243,6 @@ def admin():
     add_admin_form = AddAdminForm()
     record_new_job_form = RecordNewJobForm()
     add_institution_form = AddInstitutionForm()
-    edit_institution_form = EditInstitutionForm()
     delete_institution_form = DeleteInstitutionForm()
     add_Certification_form = AddCertificationForm()
     edit_certification_form = EditCertificationForm()
@@ -255,7 +254,7 @@ def admin():
                            delete_employer_form=delete_employer_form, add_admin_form=add_admin_form,
                            add_employee_form=add_employee_form, edit_employee_form=edit_employee_form,
                            delete_employee_form=delete_employee_form, form=record_new_job_form,
-                           add_institution_form=add_institution_form, edit_institution_form=edit_institution_form,
+                           add_institution_form=add_institution_form,
                            delete_institution_form=delete_institution_form,
                            add_Certification_form=add_Certification_form,
                            edit_certification_form=edit_certification_form,
@@ -671,7 +670,7 @@ def edit_certification():
             flash("Certification has been successfully updated!", "success")
     return redirect(url_for("admin"))
 
-#-----------------------------
+
 @app.route("/delete_certification", methods=["POST"])
 @login_required
 def delete_certification():
