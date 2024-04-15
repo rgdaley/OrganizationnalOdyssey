@@ -8,7 +8,7 @@ from sqlalchemy import *
 
 from forms import RegistrationForm, LoginForm, SearchForm, NewEmployerForm, EditEmployerForm, \
     RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm, EditEmployeeForm, \
-    DeleteEmployeeForm, AddInstitutionForm, DeleteInstitutionForm, AddCertificationForm, \
+    DeleteEmployeeForm, AddInstitutionForm, EditInstitutionForm, DeleteInstitutionForm, AddCertificationForm, \
     DeleteCertificationForm, EditCertificationForm
 
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -243,6 +243,7 @@ def admin():
     add_admin_form = AddAdminForm()
     record_new_job_form = RecordNewJobForm()
     add_institution_form = AddInstitutionForm()
+    edit_institution_form = EditInstitutionForm()
     delete_institution_form = DeleteInstitutionForm()
     add_Certification_form = AddCertificationForm()
     edit_certification_form = EditCertificationForm()
@@ -254,7 +255,7 @@ def admin():
                            delete_employer_form=delete_employer_form, add_admin_form=add_admin_form,
                            add_employee_form=add_employee_form, edit_employee_form=edit_employee_form,
                            delete_employee_form=delete_employee_form, form=record_new_job_form,
-                           add_institution_form=add_institution_form,
+                           add_institution_form=add_institution_form, edit_institution_form=edit_institution_form,
                            delete_institution_form=delete_institution_form,
                            add_Certification_form=add_Certification_form,
                            edit_certification_form=edit_certification_form,
@@ -608,6 +609,31 @@ def add_institution():
 
     return render_template("add_institution.html", form=form)
 
+
+@app.route("/edit_institution", methods=["POST"])
+@login_required
+def edit_institution():
+    if not current_user.admin:
+        return
+
+    form = EditInstitutionForm()
+    if form.validate_on_submit():
+        institution = Institution.query.filter_by(institution_name=form.institution_name.data).first()
+        if not institution:
+            flash(f"{form.institution_name.data} does not exist", "danger")
+            return redirect(url_for("admin"))
+
+        edited = False
+        if form.institution_name.data:
+            institution.institution_name = form.institution_name.data
+            edited = True
+        db.session.commit()
+
+        if edited:
+            flash("Institution has been successfully updated!", "success")
+    return redirect(url_for("admin"))
+
+
 @app.route("/delete_institution", methods=["POST"])
 @login_required
 def delete_institution():
@@ -616,10 +642,10 @@ def delete_institution():
 
     form = DeleteInstitutionForm()
     if form.validate_on_submit():
-        institution = Institution.query.filter_by(institution_name=form.institution_name.data, auth_cert=form.auth_cert.data).first()
+        institution = Institution.query.filter_by(institution_name=form.institution_name.data).first()
 
         if not institution:
-            flash(f"{form.institution_name.data} {form.auth_cert.data} does not exist", "danger")
+            flash(f"{form.institution_name.data}  does not exist", "danger")
             return redirect(url_for("admin"))
 
         db.session.delete(institution)
@@ -646,6 +672,7 @@ def add_Certification():
         flash("Certification added successfully!", "success")
         return redirect(url_for("admin"))
     return render_template("add_Certification.html", form=form)
+
 
 @app.route("/edit_certification", methods=["POST"])
 @login_required
@@ -690,42 +717,9 @@ def delete_certification():
         flash("Certification deleted", "success")
     return redirect(url_for("admin"))
 
+
 @app.route("/institutions")
 @login_required
 def institutions():
     institutions = Institution.query.all()
     return render_template("institutions.html", institutions=institutions)
-
-
-
-
-
-
-# @app.route("/edit_institution", methods=["POST"])
-# @login_required
-# def edit_institution():
-#     if not current_user.admin:
-#         return
-#
-#     form = EditInstitutionForm()
-#     if form.validate_on_submit():
-#         institution = Institution.query.filter_by(institutionName=form.institution_name.data, auth_cert=form.auth_cert.data).first()
-#         if not institution:
-#             flash(f"{form.institution_name.data} {form.auth_cert.data} does not exist", "danger")
-#             return redirect(url_for("admin"))
-#
-#         edited = False
-#         if form.phone_number.data:
-#             institution.phone_number = form.phone_number.data
-#             edited = True
-#         if form.institution_address.data:
-#             institution.institution_address = form.institution_address.data
-#             edited = True
-#         if form.email_address.data:
-#             institution.email_address = form.email_address.data
-#             edited = True
-#         db.session.commit()
-#
-#         if edited:
-#             flash("Institution has been successfully updated!", "success")
-#     return redirect(url_for("admin"))

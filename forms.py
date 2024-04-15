@@ -104,6 +104,12 @@ class AddInstitutionForm(FlaskForm):
     # email_address = StringField("Email Address", validators=[DataRequired(), Email()])
     submit = SubmitField("Add Institution")
 
+
+class EditInstitutionForm(FlaskForm):
+    institution_name = StringField("Institution Name", validators=[DataRequired()])
+    submit = SubmitField("Edit Institution")
+
+
 class DeleteInstitutionForm(FlaskForm):
     institution_name = StringField("Institution Name", validators=[DataRequired()])
     # auth_cert = StringField("Authorized Certification", validators=[DataRequired()])
@@ -123,13 +129,4 @@ class EditCertificationForm(FlaskForm):
 class DeleteCertificationForm(FlaskForm):
     new_certification = StringField("Certification", validators=[DataRequired()])
     submit = SubmitField('Add')
-
-
-# class EditInstitutionForm(FlaskForm):
-#    institution_name = StringField("Institution Name", validators=[DataRequired()])
-#    submit = SubmitField("Edit Institution")
-#    auth_cert = StringField("Authorized Certification", validators=[DataRequired()])
-#    phone_number = StringField("Phone Number", validators=[DataRequired(), Length(min=10, max=15)])
-#    institution_address = StringField("Address", validators=[DataRequired()])
-#    email_address = StringField("Email Address", validators=[DataRequired(), Email()])
 
