@@ -3,7 +3,6 @@ from wtforms import SelectField, StringField, PasswordField, SubmitField, DateFi
 from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional
 
 
-
 class RegistrationForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
@@ -99,25 +98,26 @@ class RecordNewJobForm(FlaskForm):
 
 class AddInstitutionForm(FlaskForm):
     institution_name = StringField("Institution Name", validators=[DataRequired()])
-    auth_cert = StringField("Authorized Certifications", validators=[DataRequired()])
-    phone_number = StringField("Phone Number", validators=[DataRequired(), Length(min=10, max=15)])
-    institution_address = StringField("Address", validators=[DataRequired()])
-    email_address = StringField("Email Address", validators=[DataRequired(), Email()])
+   # auth_cert = StringField("Authorized Certifications", validators=[DataRequired()])
+   # phone_number = StringField("Phone Number", validators=[DataRequired(), Length(min=10, max=15)])
+   # institution_address = StringField("Address", validators=[DataRequired()])
+    # email_address = StringField("Email Address", validators=[DataRequired(), Email()])
     submit = SubmitField("Add Institution")
 
 
 class EditInstitutionForm(FlaskForm):
-        institution_name = StringField("Institution Name", validators=[DataRequired()])
-        auth_cert = StringField("Authorized Certification", validators=[DataRequired()])
-        phone_number = StringField("Phone Number", validators=[DataRequired(), Length(min=10, max=15)])
-        institution_address = StringField("Address", validators=[DataRequired()])
-        email_address = StringField("Email Address", validators=[DataRequired(), Email()])
-        submit = SubmitField("Edit Institution")
+    institution_name = StringField("Institution Name", validators=[DataRequired()])
+    submit = SubmitField("Edit Institution")
+
+#  auth_cert = StringField("Authorized Certification", validators=[DataRequired()])
+#  phone_number = StringField("Phone Number", validators=[DataRequired(), Length(min=10, max=15)])
+#  institution_address = StringField("Address", validators=[DataRequired()])
+#  email_address = StringField("Email Address", validators=[DataRequired(), Email()])
 
 
 class DeleteInstitutionForm(FlaskForm):
     institution_name = StringField("Institution Name", validators=[DataRequired()])
-    auth_cert = StringField("Authorized Certification", validators=[DataRequired()])
+    # auth_cert = StringField("Authorized Certification", validators=[DataRequired()])
     submit = SubmitField("Delete Institution")
 
 
@@ -130,7 +130,7 @@ class EditCertificationForm(FlaskForm):
     new_certification = StringField("Certification", validators=[DataRequired()])
     submit = SubmitField('Add')
 
+
 class DeleteCertificationForm(FlaskForm):
     new_certification = StringField("Certification", validators=[DataRequired()])
     submit = SubmitField('Add')
-

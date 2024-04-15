@@ -475,62 +475,6 @@
                {% endif %}
            </div>
 
-           <div class="form-group">
-               {{ add_institution_form.auth_cert.label(class="form-control-label") }}
-               {% if add_institution_form.auth_cert.errors %}
-                   {{ add_institution_form.auth_cert(class="form-control form-control-lg is-invalid") }}
-                   <div class="invalid-feedback">
-                       {% for error in add_institution_form.auth_cert.errors %}
-                           <span>{{ error }}</span>
-                       {% endfor %}
-                   </div>
-               {% else %}
-                   {{ add_institution_form.auth_cert(class="form-control form-control-lg") }}
-               {% endif %}
-           </div>
-
-           <div class="form-group">
-               {{ add_institution_form.phone_number.label(class="form-control-label") }}
-               {% if add_institution_form.phone_number.errors %}
-                   {{ add_institution_form.phone_number(class="form-control form-control-lg is-invalid") }}
-                   <div class="invalid-feedback">
-                       {% for error in add_institution_form.phone_number.errors %}
-                           <span>{{ error }}</span>
-                       {% endfor %}
-                   </div>
-               {% else %}
-                   {{ add_institution_form.phone_number(class="form-control form-control-lg") }}
-               {% endif %}
-           </div>
-
-           <div class="form-group">
-               {{ add_institution_form.institution_address.label(class="form-control-label") }}
-               {% if add_institution_form.institution_address.errors %}
-                   {{ add_institution_form.institution_address(class="form-control form-control-lg is-invalid") }}
-                   <div class="invalid-feedback">
-                       {% for error in add_institution_form.institution_address.errors %}
-                           <span>{{ error }}</span>
-                       {% endfor %}
-                   </div>
-               {% else %}
-                   {{ add_institution_form.institution_address(class="form-control form-control-lg") }}
-               {% endif %}
-           </div>
-
-            <div class="form-group">
-               {{ add_institution_form.email_address.label(class="form-control-label") }}
-               {% if add_institution_form.email_address.errors %}
-                   {{ add_institution_form.email_address(class="form-control form-control-lg is-invalid") }}
-                   <div class="invalid-feedback">
-                       {% for error in add_institution_form.email_address.errors %}
-                           <span>{{ error }}</span>
-                       {% endfor %}
-                   </div>
-               {% else %}
-                   {{ add_institution_form.email_address(class="form-control form-control-lg") }}
-               {% endif %}
-           </div>
-
 
            <div class="form-group mt-3 mb-3">
                {{ add_institution_form.submit(class="btn btn-outline-info border rounded") }}
@@ -630,8 +574,6 @@
           <legend class="border-bottom mb-4">Edit certification</legend>
 
 
-
-
           <div class="form-group">
               {{ edit_certification_form.name.label(class="form-control-label") }}
               {% if edit_certification_form.name.errors %}
@@ -647,8 +589,6 @@
           </div>
 
 
-
-
           <div class="form-group mt-3 mb-3">
               {{ edit_certification_form.submit(class="btn btn-outline-info") }}
           </div>
@@ -660,8 +600,6 @@
       <form method="POST" action="{{ url_for('delete_certification') }}">
           {{ delete_certification_form.hidden_tag() }}
           <legend class="border-bottom mb-4">Delete certification</legend>
-
-
 
 
           <div class="form-group">
@@ -677,8 +615,6 @@
                   {{ delete_certification_form.name(class="form-control form-control-lg") }}
               {% endif %}
           </div>
-
-
 
 
           <div class="form-group mt-3 mb-3">

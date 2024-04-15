@@ -655,7 +655,7 @@ def delete_institution():
         institution = Institution.query.filter_by(institution_name=form.institution_name.data, auth_cert=form.auth_cert.data).first()
 
         if not institution:
-            flash(f"{form.institutionName.data} {form.auth_cert.data} does not exist", "danger")
+            flash(f"{form.institution_name.data} {form.auth_cert.data} does not exist", "danger")
             return redirect(url_for("admin"))
 
         db.session.delete(institution)
