@@ -1,35 +1,10 @@
-function fetchAndCreateChart() {
-    fetch('/visualize')
-        .then(response => response.json())
-        .then(data => {
-            anychart.onDocumentReady(function () {
-                // create a chart and set the data
-                var chart = anychart.graph({
-                    nodes: data.nodes,
-                    edges: data.links.map(link => ({
-                        from: link.from,
-                        to: link.to,
-                        labels: [{text: link.label, enabled: true}]
-                    }))
-                });
+{% extends 'layout.html' %}
 
-                chart.nodes().labels().enabled(true);
-                chart.nodes().labels().format("{%name}");
-                chart.nodes().labels().fontSize(12);
-                chart.nodes().labels().fontWeight(600);
-
-                chart.edges().arrows().enabled(true);
-                chart.tooltip().useHtml(true);
-
-                // set the container id
-                chart.container("chart_container");
-
-                // initiate drawing the chart
-                chart.draw();
-            });
-        });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    fetchAndCreateChart();
-});
+{% block content %}
+<div class="container">
+    <h1>Visualization</h1>
+    <div id="chart_container" style="width: 100%; height: 600px;"></div>
+</div>
+<script src="https://cdn.anychart.com/releases/8.11.1/js/anychart-bundle.min.js"></script>
+<script src="{{ url_for('static', filename='visualization.js') }}"></script>
+{% endblock %}

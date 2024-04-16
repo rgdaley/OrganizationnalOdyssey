@@ -750,6 +750,11 @@ def institutions():
     return render_template("institutions.html", institutions=institutions)
 
 
+@app.route('/visualization')
+def visualization_page():
+    return render_template('visualization.html')
+
+
 @app.route('/visualize')
 def visualize():
     digraph = VisualizationDigraph()
