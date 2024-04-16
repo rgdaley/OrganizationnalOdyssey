@@ -1,4 +1,4 @@
-unction createChart(employerData)
+function createChart(employerData)
 {
     anychart.onDocumentReady(function () {
         // create data
