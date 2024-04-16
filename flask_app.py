@@ -500,6 +500,8 @@ def delete_employee():
             flash(f"{form.first_name.data} {form.last_name.data} does not exist", "danger")
             return redirect(url_for("admin"))
 
+        EmployeeEmploymentRecord.query.filter_by(theEmployee=employee.id).delete()
+
         db.session.delete(employee)
         db.session.commit()
         flash(f"Employee deleted", "success")
