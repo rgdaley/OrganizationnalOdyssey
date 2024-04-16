@@ -195,7 +195,7 @@ def confirm_account(token):
 
 
 @app.route("/visualization/<root_node>", methods=["GET", "POST"])
-@app.route("/visualization", methods=["POST"])
+@app.route("/visualization", methods=["GET", "POST"])
 @login_required
 def visualization(root_node=None):
     form = SearchForm()
