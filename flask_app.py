@@ -1,7 +1,7 @@
 from datetime import datetime
 import os
 
-from flask import Flask, render_template, url_for, redirect, request, flash
+from flask import Flask, render_template, url_for, redirect, request, flash, jsonify
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
@@ -107,11 +107,36 @@ class EmployeeCertificationForm(db.Model):
     grantedCertification = db.Column(db.Integer, db.ForeignKey('certification.id'), nullable=False)
     awardDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
+
 class Institution(db.Model):
     __tablename__ = "institution"
 
     id = db.Column(db.Integer, primary_key=True)
     institution_name = db.Column(db.String(60), nullable=False, unique=True)
+
+
+class VisualizationDigraph:
+    def __init__(self):
+        self.nodes = set()
+        self.arcs = set()
+
+    def add_node(self, node):
+        self.nodes.add(node)
+
+    def add_arc(self, arc):
+        self.arcs.add(arc)
+
+
+class Node:
+    def __init__(self, entity):
+        self.entity = entity    # This can be an instance of Employer, Employee, or Institution
+
+
+class Arc:
+    def __init__(self, source, target, arc_type):
+        self.source = source  # Source node
+        self.target = target  # Target node
+        self.arc_type = arc_type  # Type like 'EmployedInJob', 'EmployerToEmployer', 'HasCredential'
 
 
 @login_manager.user_loader
@@ -723,3 +748,44 @@ def delete_certification():
 def institutions():
     institutions = Institution.query.all()
     return render_template("institutions.html", institutions=institutions)
+
+
+@app.route('/visualize')
+def visualize():
+    digraph = VisualizationDigraph()
+
+    # Fetch necessary data from the database
+    all_employers = Employer.query.all()
+    all_employees = Employee.query.all()
+    all_institutions = Institution.query.all()
+    employment_records = EmployeeEmploymentRecord.query.all()
+    certification_records = EmployeeCertificationForm.query.all()  # Assumed existence
+
+    # Add nodes for each employer, employee, and institution
+    for employer in all_employers:
+        digraph.add_node(Node(employer))
+    for employee in all_employees:
+        digraph.add_node(Node(employee))
+    for institution in all_institutions:
+        digraph.add_node(Node(institution))
+
+    # Add arcs for employment records
+    for record in employment_records:
+        employer_node = next((node for node in digraph.nodes if node.entity.id == record.theEmployer), None)
+        employee_node = next((node for node in digraph.nodes if node.entity.id == record.theEmployee), None)
+        if employer_node and employee_node:
+            digraph.add_arc(Arc(employee_node, employer_node, 'EmployedInJob'))
+
+    # Add arcs for certification records
+    for record in certification_records:
+        employee_node = next((node for node in digraph.nodes if node.entity.id == record.certAwardedTo), None)
+        institution_node = next((node for node in digraph.nodes if node.entity.id == record.grantingInstitution), None)
+        if employee_node and institution_node:
+            digraph.add_arc(Arc(employee_node, institution_node, 'HasCredential'))
+
+    # Prepare data for AnyChart
+    nodes = [{'id': str(node.entity.id), 'name': getattr(node.entity, 'employer_name', getattr(node.entity, 'institution_name', node.entity.first_name + ' ' + node.entity.last_name))} for node in digraph.nodes]
+    links = [{'from': str(arc.source.entity.id), 'to': str(arc.target.entity.id), 'label': arc.arc_type} for arc in digraph.arcs]
+
+    # Return JSON data
+    return jsonify({'nodes': nodes, 'links': links})

@@ -1,38 +1,35 @@
-{% extends 'layout.html' %}
-{% block content %}
-    <head>
-        <script src="https://cdn.anychart.com/releases/8.11.1/js/anychart-base.min.js" type="text/javascript"></script>
-        <script src="https://cdn.anychart.com/releases/8.11.1/js/anychart-graph.min.js"></script>
-        <script src="{{url_for('static', filename='visualization.js')}}"></script>
-    </head>
+function fetchAndCreateChart() {
+    fetch('/visualize')
+        .then(response => response.json())
+        .then(data => {
+            anychart.onDocumentReady(function () {
+                // create a chart and set the data
+                var chart = anychart.graph({
+                    nodes: data.nodes,
+                    edges: data.links.map(link => ({
+                        from: link.from,
+                        to: link.to,
+                        labels: [{text: link.label, enabled: true}]
+                    }))
+                });
 
-    <body>
-    <h1 class="border-bottom">Visualization</h1>
+                chart.nodes().labels().enabled(true);
+                chart.nodes().labels().format("{%name}");
+                chart.nodes().labels().fontSize(12);
+                chart.nodes().labels().fontWeight(600);
 
-    <div class="row">
+                chart.edges().arrows().enabled(true);
+                chart.tooltip().useHtml(true);
 
-        <div class="col-lg-4">
-            <div class="justify-content-left" style="font-size:1.4em;overflow-y: auto;height:32em">
-                <div class="pb-5">
-                Employer:   {{ employer.employer_name }} </br>
-                Address: {{ employer.headquarters_address }} </br>
-                Start Date: {{ employer.start_date.strftime("%Y-%m-%d") }} </br>
-                End Date: {{ end_time }} </br>
-                </div>
-                {% if employer.description != "" %}
-                Description: {{ employer.description }}
-                {% endif %}
-            </div>
-        </div>
+                // set the container id
+                chart.container("chart_container");
 
-        <div class="col-lg-8">
-            <div class="d-flex justify-content-center" style="height:45em">
-            <div id="chart_container" class="w-100 p-3" style="background-color: #eee;"></div>
-            </div>
-            <script>createChart({{data|tojson}})</script>
-        </div>
+                // initiate drawing the chart
+                chart.draw();
+            });
+        });
+}
 
-    </div>
-    </body>
-
-{% endblock content %}
+document.addEventListener("DOMContentLoaded", function () {
+    fetchAndCreateChart();
+});
