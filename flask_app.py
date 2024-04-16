@@ -725,5 +725,5 @@ def delete_certification():
 @app.route("/institutions")
 @login_required
 def institutions():
-    institutions = Institution.query.all()
-    return render_template("institutions.html", institutions=institutions)
+    all_institutions = Institution.query.all()
+    return render_template("institutions.html", all_institutions=all_institutions)
