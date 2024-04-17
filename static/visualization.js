@@ -1,29 +1,38 @@
-function createChart(data) {
-    anychart.onDocumentReady(function() {
+function createChart(employerData)
+{
+    anychart.onDocumentReady(function () {
+        // create data
+        var data = employerData;
+
+        // create a chart and set the data
         var chart = anychart.graph(data);
 
+        chart.edges().arrows().enabled(true);
+
+        // enable labels of nodes
         chart.nodes().labels().enabled(true);
+
+        // configure labels of nodes
         chart.nodes().labels().format("{%name}");
         chart.nodes().labels().fontSize(12);
         chart.nodes().labels().fontWeight(600);
 
-        chart.edges().arrows().enabled(true);
+        chart.tooltip().useHtml(true);
+        var nodeFormat = "Name: {%name} </br> Address: {%address} " +
+                                "</br> Start Date: {%start_date} </br> End Date: {%end_date} " +
+                                "</br> Description: {%description}";
+        chart.nodes().tooltip().format(nodeFormat);
+        chart.edges().tooltip().format("From: {%from_name} </br> To: {%to_name}");
 
-        // Customize tooltip based on node and edge type
-        chart.nodes().tooltip().format(function() {
-            var info = "Name: " + this.name + "<br>Type: " + this.data.type;
-            if (this.data.type === "Employer") {
-                info += "<br>Address: " + this.data.address +
-                        "<br>Start Date: " + this.data.start_date +
-                        "<br>End Date: " + this.data.end_date;
-            }
-            return info;
-        });
-        chart.edges().tooltip().format(function() {
-            return "Relation: " + this.data.type;
-        });
-
+        // set the container id
         chart.container("chart_container");
+
+        // initiate drawing the chart
         chart.draw();
     });
+
+    // set the layout type
+    function layoutType(type) {
+      chart.layout().type(type);
+    }
 }
