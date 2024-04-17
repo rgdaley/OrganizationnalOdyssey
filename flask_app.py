@@ -202,12 +202,12 @@ def visualization(root_node=None):
     form = SearchForm()
     if root_node:
         starting_point = Employer.query.filter_by(employer_name=root_node).first() or \
-                         Employee.query.filter_by(employee_name=root_node).first() or \
+                         Employee.query.filter(Employee.first_name.ilike(root_node) | Employee.last_name.ilike(root_node)).first() or \
                          Institution.query.filter_by(institution_name=root_node).first()
 
     else:
         starting_point = Employer.query.filter_by(employer_name=form.search.data).first() or \
-                         Employee.query.filter_by(employee_name=form.search.data).first() or \
+                         Employee.query.filter(Employee.first_name.ilike(form.search.data) | Employee.last_name.ilike(form.search.data)).first() or \
                          Institution.query.filter_by(institution_name=form.search.data).first()
 
     if not starting_point:
@@ -219,9 +219,10 @@ def visualization(root_node=None):
 
     # Helper function to handle nodes and edges
     def add_node(node, node_type):
+        node_name = node.employer_name if node_type == 'Employer' else node.institution_name if node_type == 'Institution' else f"{node.first_name} {node.last_name}"
         node_info = {
             "id": node.id,
-            "name": getattr(node, 'employer_name', getattr(node, 'employee_name', node.institution_name)),
+            "name": node_name,
             "type": node_type,
             "details": node.description if hasattr(node, 'description') else "No Description"
         }
