@@ -8,19 +8,21 @@
 
     <body>
     <h1 class="border-bottom">Visualization</h1>
-
     <div class="row">
         <div class="col-lg-4">
             <div class="justify-content-left" style="font-size:1.4em;overflow-y: auto;height:32em">
                 <div class="pb-5">
-                    Name: {{ root_node.employer_name if root_node.type == 'Employer' else root_node.institution_name if root_node.type == 'Institution' else root_node.first_name + ' ' + root_node.last_name }} <br>
-                    Type: {{ root_node.type }} <br>
-                    {% if root_node.type == 'Employer' %}
+                    {% if root_node.__tablename__ == 'employer' %}
+                    Name: {{ root_node.employer_name }} <br>
                     Address: {{ root_node.headquarters_address }} <br>
                     Start Date: {{ root_node.start_date.strftime("%Y-%m-%d") }} <br>
                     End Date: {{ root_node.end_date.strftime("%Y-%m-%d") if root_node.end_date else 'Present' }} <br>
+                    {% elif root_node.__tablename__ == 'employee' %}
+                    Name: {{ root_node.first_name }} {{ root_node.last_name }} <br>
+                    {% elif root_node.__tablename__ == 'institution' %}
+                    Name: {{ root_node.institution_name }} <br>
                     {% endif %}
-                    Description: {{ root_node.description if root_node.type != 'Employee' else 'N/A' }}
+                    Description: {{ root_node.description if 'description' in root_node.__dict__ else 'N/A' }}
                 </div>
             </div>
         </div>
@@ -33,4 +35,4 @@
         </div>
     </div>
     </body>
-{% endblock content %}
+{% endblock %}

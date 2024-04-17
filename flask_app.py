@@ -201,14 +201,17 @@ def confirm_account(token):
 def visualization(root_node=None):
     form = SearchForm()
     if root_node:
-        starting_point = Employer.query.filter_by(employer_name=root_node).first() or \
-                         Employee.query.filter(Employee.first_name.ilike(root_node) | Employee.last_name.ilike(root_node)).first() or \
-                         Institution.query.filter_by(institution_name=root_node).first()
+        starting_point = (Employer.query.filter_by(employer_name=root_node).first() or
+                          Employee.query.filter(or_(Employee.first_name.ilike(f"%{root_node}%"),
+                                                    Employee.last_name.ilike(f"%{root_node}%"))).first() or
+                          Institution.query.filter_by(institution_name=root_node).first())
 
     else:
-        starting_point = Employer.query.filter_by(employer_name=form.search.data).first() or \
-                         Employee.query.filter(Employee.first_name.ilike(form.search.data) | Employee.last_name.ilike(form.search.data)).first() or \
-                         Institution.query.filter_by(institution_name=form.search.data).first()
+        search_term = form.search.data
+        starting_point = (Employer.query.filter_by(employer_name=search_term).first() or
+                          Employee.query.filter(or_(Employee.first_name.ilike(f"%{search_term}%"),
+                                                    Employee.last_name.ilike(f"%{search_term}%"))).first() or
+                          Institution.query.filter_by(institution_name=search_term).first())
 
     if not starting_point:
         flash(f"Selected starting point not found", "danger")
