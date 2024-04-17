@@ -3,7 +3,7 @@
     <head>
         <script src="https://cdn.anychart.com/releases/8.11.1/js/anychart-base.min.js" type="text/javascript"></script>
         <script src="https://cdn.anychart.com/releases/8.11.1/js/anychart-graph.min.js"></script>
-        <script src="{{url_for('static', filename='visualization.js')}}"></script>
+        <script src="{{ url_for('static', filename='visualization.js') }}"></script>
     </head>
 
     <body>
@@ -13,14 +13,14 @@
         <div class="col-lg-4">
             <div class="justify-content-left" style="font-size:1.4em;overflow-y: auto;height:32em">
                 <div class="pb-5">
-                    Name: {{ root_node.name }} <br>
+                    Name: {{ root_node.employer_name if root_node.type == 'Employer' else root_node.institution_name if root_node.type == 'Institution' else root_node.first_name + ' ' + root_node.last_name }} <br>
                     Type: {{ root_node.type }} <br>
                     {% if root_node.type == 'Employer' %}
-                    Address: {{ root_node.address }} <br>
+                    Address: {{ root_node.headquarters_address }} <br>
                     Start Date: {{ root_node.start_date.strftime("%Y-%m-%d") }} <br>
-                    End Date: {{ root_node.end_date }} <br>
+                    End Date: {{ root_node.end_date.strftime("%Y-%m-%d") if root_node.end_date else 'Present' }} <br>
                     {% endif %}
-                    Description: {{ root_node.description | default('No Description', true) }}
+                    Description: {{ root_node.description if root_node.type != 'Employee' else 'N/A' }}
                 </div>
             </div>
         </div>

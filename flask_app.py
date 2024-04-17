@@ -211,7 +211,7 @@ def visualization(root_node=None):
                          Institution.query.filter_by(institution_name=form.search.data).first()
 
     if not starting_point:
-        flash(f"Selected employer not found", "danger")
+        flash(f"Selected starting point not found", "danger")
         return redirect(url_for("home"))
 
     data = {"nodes": [], "edges": []}
@@ -268,7 +268,7 @@ def visualization(root_node=None):
     # Start traversing from the initial node
     traverse(starting_point)
 
-    return render_template("visualization.html", data=data)
+    return render_template("visualization.html", root_node=starting_point, data=data)
 
 
 @app.route("/admin")
