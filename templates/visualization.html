@@ -10,29 +10,27 @@
     <h1 class="border-bottom">Visualization</h1>
 
     <div class="row">
-
         <div class="col-lg-4">
             <div class="justify-content-left" style="font-size:1.4em;overflow-y: auto;height:32em">
                 <div class="pb-5">
-                Employer:   {{ employer.employer_name }} </br>
-                Address: {{ employer.headquarters_address }} </br>
-                Start Date: {{ employer.start_date.strftime("%Y-%m-%d") }} </br>
-                End Date: {{ end_time }} </br>
+                    Name: {{ root_node.name }} <br>
+                    Type: {{ root_node.type }} <br>
+                    {% if root_node.type == 'Employer' %}
+                    Address: {{ root_node.address }} <br>
+                    Start Date: {{ root_node.start_date.strftime("%Y-%m-%d") }} <br>
+                    End Date: {{ root_node.end_date }} <br>
+                    {% endif %}
+                    Description: {{ root_node.description | default('No Description', true) }}
                 </div>
-                {% if employer.description != "" %}
-                Description: {{ employer.description }}
-                {% endif %}
             </div>
         </div>
 
         <div class="col-lg-8">
             <div class="d-flex justify-content-center" style="height:45em">
-            <div id="chart_container" class="w-100 p-3" style="background-color: #eee;"></div>
+                <div id="chart_container" class="w-100 p-3" style="background-color: #eee;"></div>
             </div>
-            <script>createChart({{data|tojson}})</script>
+            <script>createChart({{ data | tojson | safe }});</script>
         </div>
-
     </div>
     </body>
-
 {% endblock content %}

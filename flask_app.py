@@ -201,32 +201,73 @@ def confirm_account(token):
 def visualization(root_node=None):
     form = SearchForm()
     if root_node:
-        employer = Employer.query.filter_by(employer_name=root_node).first()
-    else:
-        employer = Employer.query.filter_by(employer_name=form.search.data).first()
+        starting_point = Employer.query.filter_by(employer_name=root_node).first() or \
+                         Employee.query.filter_by(employee_name=root_node).first() or \
+                         Institution.query.filter_by(institution_name=root_node).first()
 
-    if not employer:
+    else:
+        starting_point = Employer.query.filter_by(employer_name=form.search.data).first() or \
+                         Employee.query.filter_by(employee_name=form.search.data).first() or \
+                         Institution.query.filter_by(institution_name=form.search.data).first()
+
+    if not starting_point:
         flash(f"Selected employer not found", "danger")
         return redirect(url_for("home"))
 
     data = {"nodes": [], "edges": []}
-    visited_nodes = []
+    visited_nodes = set()
 
-    end_time = employer.end_date
-    end_time = end_time.strftime("%Y-%m-%d") if end_time is not None else "Active Company"
+    # Helper function to handle nodes and edges
+    def add_node(node, node_type):
+        node_info = {
+            "id": node.id,
+            "name": getattr(node, 'employer_name', getattr(node, 'employee_name', node.institution_name)),
+            "type": node_type,
+            "details": node.description if hasattr(node, 'description') else "No Description"
+        }
+        if node_type == "Employer":
+            node_info.update({
+                "address": node.headquarters_address,
+                "start_date": node.start_date.strftime("%Y-%m-%d"),
+                "end_date": node.end_date.strftime("%Y-%m-%d") if node.end_date else "Active Company"
+            })
+        data["nodes"].append(node_info)
+        visited_nodes.add(node.id)
 
-    description = employer.description if employer.description != "" else "No Description"
-    description = (description[:100] + "...") if len(description) > 100 else description
-    data.get("nodes").append({"id": employer.id,
-                              "name": employer.employer_name,
-                              "address": employer.headquarters_address,
-                              "start_date": employer.start_date.strftime("%Y-%m-%d"),
-                              "end_date": end_time,
-                              "description": description,
-                              "fill": "purple", "shape": "diamond"})
-    traverse_tree(employer, data, visited_nodes)
+    # Add starting point node
+    add_node(starting_point, type(starting_point).__name__)
 
-    return render_template("visualization.html", employer=employer, data=data, end_time=end_time)
+    # Traverse and add other related nodes and edges
+    def traverse(node):
+        if node.id in visited_nodes:
+            return
+        visited_nodes.add(node.id)
+
+        # Handling different types of nodes and relationships
+        if isinstance(node, Employer):
+            # EmployedInJob relationships
+            for employment in EmployeeEmploymentRecord.query.filter_by(employer_id=node.id):
+                employee = Employee.query.get(employment.employee_id)
+                add_node(employee, 'Employee')
+                data["edges"].append({"from": node.id, "to": employee.id, "type": "EmployedInJob"})
+
+            # EmployerToEmployer relationships
+            for relation in employer_relation.query.filter_by(parentEmployer_id=node.id):
+                child = Employer.query.get(relation.childEmployer_id)
+                add_node(child, 'Employer')
+                data["edges"].append({"from": node.id, "to": child.id, "type": "EmployerToEmployer"})
+
+        elif isinstance(node, Employee):
+            # HasCredential relationships
+            for credential in Certification.query.filter_by(employee_id=node.id):
+                institution = Institution.query.get(credential.institution_id)
+                add_node(institution, 'Institution')
+                data["edges"].append({"from": node.id, "to": institution.id, "type": "HasCredential"})
+
+    # Start traversing from the initial node
+    traverse(starting_point)
+
+    return render_template("visualization.html", data=data)
 
 
 @app.route("/admin")
@@ -277,35 +318,85 @@ def employers():
     return render_template("employers.html", all_employers=all_employers, employer_descriptions=employer_descriptions)
 
 
-def traverse_tree(root_employer, data, visited_nodes):
-    if root_employer in visited_nodes:
+def traverse_tree(node, data, visited_nodes):
+    if node.id in visited_nodes:
         return
-    end_time = root_employer.end_date
-    end_time = end_time.strftime("%Y-%m-%d") if end_time is not None else "Active Company"
 
-    description = root_employer.description if root_employer.description != "" else "No Description"
+    # Add current node to visited to avoid re-visiting
+    visited_nodes.add(node.id)
 
-    data.get("nodes").append({"id": root_employer.id,
-                              "name": root_employer.employer_name,
-                              "address": root_employer.headquarters_address,
-                              "start_date": root_employer.start_date.strftime("%Y-%m-%d"),
-                              "end_date": end_time,
-                              "description": description})
-    visited_nodes.append(root_employer)
+    # Handle different types of nodes
+    if isinstance(node, Employer):
+        # Add node details specific to Employer
+        end_time = node.end_date.strftime("%Y-%m-%d") if node.end_date else "Active Company"
+        description = node.description if node.description != "" else "No Description"
+        node_info = {
+            "id": node.id,
+            "name": node.employer_name,
+            "address": node.headquarters_address,
+            "start_date": node.start_date.strftime("%Y-%m-%d"),
+            "end_date": end_time,
+            "description": description,
+            "type": "Employer"
+        }
+        data["nodes"].append(node_info)
 
-    for child_employer in root_employer.child_employers:
-        data.get("edges").append({"from": root_employer.id,
-                                  "to": child_employer.id,
-                                  "from_name": root_employer.employer_name,
-                                  "to_name": child_employer.employer_name})
-        traverse_tree(child_employer, data, visited_nodes)
+        # Traverse child employers
+        for child_employer in node.child_employers:
+            data["edges"].append({
+                "from": node.id,
+                "to": child_employer.id,
+                "type": "EmployerToEmployer"
+            })
+            traverse_tree(child_employer, data, visited_nodes)
 
-    for parent_employer in root_employer.parent_employers:
-        data.get("edges").append({"from": parent_employer.id,
-                                  "to": root_employer.id,
-                                  "from_name": parent_employer.employer_name,
-                                  "to_name": root_employer.employer_name})
-        traverse_tree(parent_employer, data, visited_nodes)
+        # Optionally handle parent employers if needed (not typical unless bidirectional navigation is desired)
+        # for parent_employer in node.parent_employers:
+        #     data["edges"].append({"from": parent_employer.id, "to": node.id, "type": "EmployerToEmployer"})
+        #     traverse_tree(parent_employer, data, visited_nodes)
+
+    elif isinstance(node, Employee):
+        # Add node details specific to Employee
+        node_info = {
+            "id": node.id,
+            "name": node.employee_name,
+            "type": "Employee"
+            # Add other relevant details
+        }
+        data["nodes"].append(node_info)
+
+        # Traverse EmployedInJob relationships
+        for employment in EmployeeEmploymentRecord.query.filter_by(employee_id=node.id):
+            employer = Employer.query.get(employment.employer_id)
+            data["edges"].append({
+                "from": node.id,
+                "to": employer.id,
+                "type": "EmployedInJob"
+            })
+            traverse_tree(employer, data, visited_nodes)
+
+        # Traverse HasCredential relationships
+        for credential in Certification.query.filter_by(employee_id=node.id):
+            institution = Institution.query.get(credential.institution_id)
+            data["edges"].append({
+                "from": node.id,
+                "to": institution.id,
+                "type": "HasCredential"
+            })
+            traverse_tree(institution, data, visited_nodes)
+
+    elif isinstance(node, Institution):
+        # Add node details specific to Institution
+        node_info = {
+            "id": node.id,
+            "name": node.institution_name,
+            "type": "Institution"
+            # Add other relevant details
+        }
+        data["nodes"].append(node_info)
+
+    # Further handling for other types of relationships and nodes can be added here
+
 
 
 @app.route("/add_employer", methods=["POST"])
