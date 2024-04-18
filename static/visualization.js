@@ -1,38 +1,42 @@
-function createChart(employerData)
-{
+function createChart(visualizationData) {
     anychart.onDocumentReady(function () {
-        // create data
-        var data = employerData;
-
-        // create a chart and set the data
-        var chart = anychart.graph(data);
-
+        var chart = anychart.graph(visualizationData);
         chart.edges().arrows().enabled(true);
+        chart.nodes().labels().enabled(true).format("{%name}").fontSize(12).fontWeight(600);
 
-        // enable labels of nodes
-        chart.nodes().labels().enabled(true);
+        // Node click event handler
+        chart.listen("click", function (e) {
+            if (e.point) {
+                updateInfoPanel(e.point);
+            }
+        });
 
-        // configure labels of nodes
-        chart.nodes().labels().format("{%name}");
-        chart.nodes().labels().fontSize(12);
-        chart.nodes().labels().fontWeight(600);
-
-        chart.tooltip().useHtml(true);
-        var nodeFormat = "Name: {%name} </br> Address: {%address} " +
-                                "</br> Start Date: {%start_date} </br> End Date: {%end_date} " +
-                                "</br> Description: {%description}";
-        chart.nodes().tooltip().format(nodeFormat);
-        chart.edges().tooltip().format("From: {%from_name} </br> To: {%to_name}");
-
-        // set the container id
-        chart.container("chart_container");
-
-        // initiate drawing the chart
+        chart.container('chart_container');
         chart.draw();
     });
+}
 
-    // set the layout type
-    function layoutType(type) {
-      chart.layout().type(type);
+function updateInfoPanel(node) {
+    var infoPanel = document.getElementById('infoPanel');
+    var data = node.getData();
+    var content = `<div class="pb-5">
+                        <strong>${data.type}: ${data.name}</strong><br>`;
+
+    if (data.type === "Employer") {
+        content += `Address: ${data.address}<br>
+                    Start Date: ${data.start_date}<br>
+                    End Date: ${data.end_date || 'Active'}<br>`;
+        if (data.description) {
+            content += `Description: ${data.description}`;
+        }
+    } else if (data.type === "Employee") {
+        content += `Email: ${data.email_address}<br>
+                    Phone: ${data.phone_number}<br>
+                    Address: ${data.address}`;
+    } else if (data.type === "Institution") {
+        content += `Institution Name: ${data.name}`;
     }
+    content += `</div>`;
+
+    infoPanel.innerHTML = content;
 }

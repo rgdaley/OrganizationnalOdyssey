@@ -200,33 +200,85 @@ def confirm_account(token):
 @login_required
 def visualization(root_node=None):
     form = SearchForm()
-    if root_node:
-        employer = Employer.query.filter_by(employer_name=root_node).first()
-    else:
-        employer = Employer.query.filter_by(employer_name=form.search.data).first()
+    data = {"nodes": [], "edges": []}
+    visited_nodes = set()
 
-    if not employer:
-        flash(f"Selected employer not found", "danger")
+    if root_node:
+        start_point = fetch_start_point(root_node)
+    else:
+        start_point = fetch_start_point(form.search.data)
+
+    if not start_point:
+        flash("Start point not found", "danger")
         return redirect(url_for("home"))
 
-    data = {"nodes": [], "edges": []}
-    visited_nodes = []
+    traverse_tree(start_point, data, visited_nodes)
+    return render_template("visualization.html", data=data)
 
-    end_time = employer.end_date
-    end_time = end_time.strftime("%Y-%m-%d") if end_time is not None else "Active Company"
 
-    description = employer.description if employer.description != "" else "No Description"
-    description = (description[:100] + "...") if len(description) > 100 else description
-    data.get("nodes").append({"id": employer.id,
-                              "name": employer.employer_name,
-                              "address": employer.headquarters_address,
-                              "start_date": employer.start_date.strftime("%Y-%m-%d"),
-                              "end_date": end_time,
-                              "description": description,
-                              "fill": "purple", "shape": "diamond"})
-    traverse_tree(employer, data, visited_nodes)
+def fetch_start_point(identifier):
+    employer = Employer.query.filter_by(employer_name=identifier).first()
+    if employer:
+        return employer
+    employee = Employee.query.filter_by(first_name=identifier.split()[0], last_name=identifier.split()[-1]).first()
+    if employee:
+        return employee
+    institution = Institution.query.filter_by(institution_name=identifier).first()
+    return institution
 
-    return render_template("visualization.html", employer=employer, data=data, end_time=end_time)
+
+def traverse_tree(node, data, visited_nodes):
+    if node.id in visited_nodes:
+        return
+    visited_nodes.add(node.id)
+
+    # Add node to data
+    if isinstance(node, Employer):
+        add_employer_node(node, data)
+    elif isinstance(node, Employee):
+        add_employee_node(node, data)
+    elif isinstance(node, Institution):
+        add_institution_node(node, data)
+
+    # Recurse for connected nodes
+    if isinstance(node, Employer):
+        for child in node.child_employers:
+            data['edges'].append({"from": node.id, "to": child.id, "type": "employer_relation"})
+            traverse_tree(child, data, visited_nodes)
+        for record in node.hasEmployed:
+            data['edges'].append({"from": node.id, "to": record.theEmployee, "type": "EmployedInJob"})
+            traverse_tree(record.theEmployee, data, visited_nodes)
+    elif isinstance(node, Employee):
+        for record in node.employers:
+            if record.theEmployer not in visited_nodes:
+                traverse_tree(record.theEmployer, data, visited_nodes)
+
+
+def add_employer_node(employer, data):
+    data['nodes'].append({
+        "id": employer.id,
+        "type": "Employer",
+        "name": employer.employer_name,
+        "start_date": employer.start_date.strftime("%Y-%m-%d"),
+        "end_date": employer.end_date.strftime("%Y-%m-%d") if employer.end_date else "Active",
+        "description": employer.description[:100] + "..." if len(employer.description) > 100 else employer.description
+    })
+
+
+def add_employee_node(employee, data):
+    data['nodes'].append({
+        "id": employee.id,
+        "type": "Employee",
+        "name": f"{employee.first_name} {employee.last_name}",
+        "phone_number": employee.phone_number,
+        "email_address": employee.email_address,
+        "address": employee.employee_address})
+
+
+def add_institution_node(institution, data):
+    data['nodes'].append({
+        "id": institution.id,
+        "name": institution.institution_name})
 
 
 @app.route("/admin")
@@ -275,37 +327,6 @@ def employers():
         employer_description = (employer.description[:50] + "...") if len(employer.description) > 50 else employer.description
         employer_descriptions.append(employer_description)
     return render_template("employers.html", all_employers=all_employers, employer_descriptions=employer_descriptions)
-
-
-def traverse_tree(root_employer, data, visited_nodes):
-    if root_employer in visited_nodes:
-        return
-    end_time = root_employer.end_date
-    end_time = end_time.strftime("%Y-%m-%d") if end_time is not None else "Active Company"
-
-    description = root_employer.description if root_employer.description != "" else "No Description"
-
-    data.get("nodes").append({"id": root_employer.id,
-                              "name": root_employer.employer_name,
-                              "address": root_employer.headquarters_address,
-                              "start_date": root_employer.start_date.strftime("%Y-%m-%d"),
-                              "end_date": end_time,
-                              "description": description})
-    visited_nodes.append(root_employer)
-
-    for child_employer in root_employer.child_employers:
-        data.get("edges").append({"from": root_employer.id,
-                                  "to": child_employer.id,
-                                  "from_name": root_employer.employer_name,
-                                  "to_name": child_employer.employer_name})
-        traverse_tree(child_employer, data, visited_nodes)
-
-    for parent_employer in root_employer.parent_employers:
-        data.get("edges").append({"from": parent_employer.id,
-                                  "to": root_employer.id,
-                                  "from_name": parent_employer.employer_name,
-                                  "to_name": root_employer.employer_name})
-        traverse_tree(parent_employer, data, visited_nodes)
 
 
 @app.route("/add_employer", methods=["POST"])
