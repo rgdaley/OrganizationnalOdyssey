@@ -248,8 +248,7 @@ def traverse_tree(node, data, visited_nodes):
         for record in node.hasEmployed:
             employee = Employee.query.get(record.theEmployee)
             employer = Employer.query.get(record.theEmployer)
-            data['edges'].append({"from": node.id, "to": employee.id, "type": "employed", "jobTitle": record.jobTitle,
-                                  "startDate": record.startDate, "endDate": record.endDate})
+            data['edges'].append({"from": node.id, "to": employee.id, "type": "EmployedInJob"})
             traverse_tree(employee, data, visited_nodes)
             if employer not in visited_nodes:
                 traverse_tree(employer, data, visited_nodes)
@@ -257,18 +256,7 @@ def traverse_tree(node, data, visited_nodes):
         for record in node.employers:
             employer = Employer.query.get(record.theEmployer)
             if employer.id not in visited_nodes:
-                data['edges'].append(
-                    {"from": node.id, "to": employer.id, "type": "employed_by", "jobTitle": record.jobTitle,
-                     "startDate": record.startDate, "endDate": record.endDate})
                 traverse_tree(employer, data, visited_nodes)
-    elif isinstance(node, Institution):
-        certifications = EmployeeCertificationForm.query.filter_by(grantingInstitution=node.id).all()
-        for cert in certifications:
-            employee = Employee.query.get(cert.certAwardedTo)
-            data['edges'].append({"from": node.id, "to": employee.id, "type": "certified",
-                                  "certificationName": Certification.query.get(
-                                      cert.grantedCertification).CertificationName, "awardDate": cert.awardDate})
-            traverse_tree(employee, data, visited_nodes)
 
 
 def add_employer_node(employer, data):
@@ -278,7 +266,6 @@ def add_employer_node(employer, data):
         "name": employer.employer_name,
         "start_date": employer.start_date.strftime("%Y-%m-%d"),
         "end_date": employer.end_date.strftime("%Y-%m-%d") if employer.end_date else "Active",
-        "headquarters_address": employer.headquarters_address,
         "description": employer.description[:100] + "..." if len(employer.description) > 100 else employer.description
     })
 
@@ -290,21 +277,12 @@ def add_employee_node(employee, data):
         "name": f"{employee.first_name} {employee.last_name}",
         "phone_number": employee.phone_number,
         "email_address": employee.email_address,
-        "employee_address": employee.employee_address,
-        "employers": [{"employer": Employer.query.get(record.theEmployer).employer_name,
-                       "jobTitle": record.jobTitle,
-                       "startDate": record.startDate,
-                       "endDate": record.endDate} for record in employee.employers],
         "address": employee.employee_address})
 
 
 def add_institution_node(institution, data):
     data['nodes'].append({
         "id": institution.id,
-        "certifications": [{"certificationName": Certification.query.get(cert.grantedCertification).CertificationName,
-                            "awardedTo": f"{Employee.query.get(cert.certAwardedTo).first_name} {Employee.query.get(cert.certAwardedTo).last_name}",
-                            "awardDate": cert.awardDate} for cert in
-                           EmployeeCertificationForm.query.filter_by(grantingInstitution=institution.id).all()],
         "name": institution.institution_name})
 
 
