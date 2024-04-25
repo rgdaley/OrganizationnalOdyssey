@@ -12,7 +12,7 @@ function createChart(visualizationData) {
         chart.listen("click", function(e) {
             var node = e.domTarget.tag;
             if (node) {
-                if (tag.type === 'node') {
+                if (node.type === 'node') {
                     console.log("Node clicked:", e.point);
                     updateInfoPanel(e.point);
                 }
