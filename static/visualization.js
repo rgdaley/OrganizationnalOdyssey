@@ -9,12 +9,15 @@ function createChart(visualizationData) {
         chart.edges().tooltip().format("Parent: {%from} -> Child: {%to}");
 
         // Node click event handler
-        chart.listen("click", function (e) {
-            console.log("Chart clicked:", e);
-            if (e.point) {
-                console.log("Node clicked:", e.point);
-                updateInfoPanel(e.point);
-            } else {
+        chart.listen("click", function(e) {
+            var node = e.domTarget.tag;
+            if (node) {
+                if (tag.type === 'node') {
+                    console.log("Node clicked:", e.point);
+                    updateInfoPanel(e.point);
+                }
+            }
+            else {
                 console.log("No node clicked");
             }
         });
