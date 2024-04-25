@@ -14,7 +14,7 @@ function createChart(visualizationData) {
             if (tag) {
                 if (tag.type === 'node') {
                     console.log("Node clicked:", tag);
-                    updateInfoPanel(tag);
+                    updateInfoPanel(tag.id);
                 }
             }
             else {
