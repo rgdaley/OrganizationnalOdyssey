@@ -19,6 +19,14 @@ function createChart(visualizationData) {
 function updateInfoPanel(node) {
     var infoPanel = document.getElementById('infoPanel');
     var data = node.getData();
+    var label = "";
+        if (node.type === "Employer") {
+            label = node.name;
+        } else if (node.type === "Employee") {
+            label = node.name;
+        } else if (node.type === "Institution") {
+            label = node.name;
+        }
     var content = `<div class="pb-5">
                         <strong>${data.type}: ${data.name}</strong><br>`;
 
@@ -39,4 +47,22 @@ function updateInfoPanel(node) {
     content += `</div>`;
 
     infoPanel.innerHTML = content;
+}
+
+function showNodeInfo(node) {
+    var info = "";
+    if (node.type === "Employer") {
+        info = "<h2>" + node.name + "</h2>" +
+               "<p><strong>Start Date:</strong> " + node.start_date + "</p>" +
+               "<p><strong>End Date:</strong> " + node.end_date + "</p>" +
+               "<p><strong>Description:</strong> " + node.description + "</p>";
+    } else if (node.type === "Employee") {
+        info = "<h2>" + node.name + "</h2>" +
+               "<p><strong>Phone Number:</strong> " + node.phone_number + "</p>" +
+               "<p><strong>Email Address:</strong> " + node.email_address + "</p>" +
+               "<p><strong>Address:</strong> " + node.address + "</p>";
+    } else if (node.type === "Institution") {
+        info = "<h2>" + node.name + "</h2>";
+    }
+    document.getElementById("infoPanel").innerHTML = info;
 }
