@@ -16,7 +16,7 @@ function createChart(visualizationData) {
                     console.log("Node clicked:", tag);
                     var update = tag.id
                     console.log("Update:", update)
-                    updateInfoPanel(visualizationData.nodes.0);
+                    updateInfoPanel(visualizationData);
                 }
             }
             else {
