@@ -243,12 +243,12 @@ def traverse_tree(node, data, visited_nodes):
     # Recurse for connected nodes
     if isinstance(node, Employer):
         for child in node.child_employers:
-            data['edges'].append({"from": node.id, "to": child.id, "type": "employer_relation"})
+            data['edges'].append({"from": node.name, "to": child.name, "type": "employer_relation"})
             traverse_tree(child, data, visited_nodes)
         for record in node.hasEmployed:
             employee = Employee.query.get(record.theEmployee)
             employer = Employer.query.get(record.theEmployer)
-            data['edges'].append({"from": node.id, "to": employee.id, "type": "EmployedInJob"})
+            data['edges'].append({"from": node.name, "to": employee.name, "type": "EmployedInJob"})
             traverse_tree(employee, data, visited_nodes)
             if employer not in visited_nodes:
                 traverse_tree(employer, data, visited_nodes)
@@ -257,6 +257,11 @@ def traverse_tree(node, data, visited_nodes):
             employer = Employer.query.get(record.theEmployer)
             if employer.id not in visited_nodes:
                 traverse_tree(employer, data, visited_nodes)
+    elif isinstance(node, Institution):
+        for record in node.institutions:
+            employee = Employee.query.get(record.certAwardedTo)
+            if employee.id not in visited_nodes:
+                traverse_tree(employee, data, visited_nodes)
 
 
 def add_employer_node(employer, data):
