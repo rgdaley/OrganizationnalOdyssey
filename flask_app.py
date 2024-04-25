@@ -257,7 +257,11 @@ def traverse_tree(node, data, visited_nodes):
             employer = Employer.query.get(record.theEmployer)
             if employer.id not in visited_nodes:
                 traverse_tree(employer, data, visited_nodes)
-    
+    elif isinstance(node, Institution):
+        for record in node.institutions:
+            employee = Employee.query.get(record.certAwardedTo)
+            if employee.id not in visited_nodes:
+                traverse_tree(employee, data, visited_nodes)
 
 
 def add_employer_node(employer, data):
