@@ -5,7 +5,7 @@ function createChart(visualizationData) {
         chart.nodes().labels().enabled(true).format("{%name}" + " " + "ID=(" + "{%id}" + ")").fontSize(12).fontWeight(600);
         chart.tooltip().useHtml(true);
         chart.nodes().tooltip().format("{%name}");
-        chart.edges().tooltip().format("{%from} -> {%to}");
+        chart.edges().tooltip().format("Parent: {%from} -> Child: {%to}");
 
         // Node click event handler
         chart.listen("click", function (e) {
