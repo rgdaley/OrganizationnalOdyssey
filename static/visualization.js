@@ -10,9 +10,9 @@ function createChart(visualizationData) {
 
         // Node click event handler
         chart.listen("click", function(e) {
-            var node = e.domTarget.tag;
-            if (node) {
-                if (node.type === 'node') {
+            var tag = e.domTarget.tag;
+            if (tag) {
+                if (tag.type === 'node') {
                     console.log("Node clicked:", e.point);
                     updateInfoPanel(e.point);
                 }
