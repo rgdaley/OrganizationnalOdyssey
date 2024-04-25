@@ -21,8 +21,10 @@ function createChart(visualizationData) {
 }
 
 function updateInfoPanel(node) {
+    console.log("updateInfoPanel called with node:", node);
     var infoPanel = document.getElementById('infoPanel');
     var data = node.getData();
+    console.log("Node data:", data);
     var content = `<div class="pb-5">
                         <strong>${data.type}: ${data.name}</strong><br>`;
 
@@ -43,4 +45,5 @@ function updateInfoPanel(node) {
     content += `</div>`;
 
     infoPanel.innerHTML = content;
+    console.log("infoPanel content updated:", content);
 }
