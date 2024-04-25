@@ -1,4 +1,5 @@
 function createChart(visualizationData) {
+    console.log("Visualization data:", visualizationData);
     anychart.onDocumentReady(function () {
         var chart = anychart.graph(visualizationData);
         chart.edges().arrows().enabled(true);
@@ -17,6 +18,7 @@ function createChart(visualizationData) {
 
         chart.container('chart_container');
         chart.draw();
+        console.log("Chart created successfully");
     });
 }
 
