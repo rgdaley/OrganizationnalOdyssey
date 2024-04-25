@@ -13,8 +13,8 @@ function createChart(visualizationData) {
             var tag = e.domTarget.tag;
             if (tag) {
                 if (tag.type === 'node') {
-                    console.log("Node clicked:", e.point);
-                    updateInfoPanel(e.point);
+                    console.log("Node clicked:", tag);
+                    updateInfoPanel(tag);
                 }
             }
             else {
