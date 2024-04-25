@@ -2,10 +2,10 @@ function createChart(visualizationData) {
     anychart.onDocumentReady(function () {
         var chart = anychart.graph(visualizationData);
         chart.edges().arrows().enabled(true);
-        chart.nodes().labels().enabled(true).format("{%name}").fontSize(12).fontWeight(600);
+        chart.nodes().labels().enabled(true).format("{%name}" + " " + "(" + "{id}" + ")").fontSize(12).fontWeight(600);
         chart.tooltip().useHtml(true);
         chart.nodes().tooltip().format("{%name}");
-        chart.edges().tooltip().format("{%from} -> {%to}");
+        chart.edges().tooltip().format("{%name} -> {%name}");
 
         // Node click event handler
         chart.listen("click", function (e) {
