@@ -224,9 +224,7 @@ def fetch_start_point(identifier):
     if employee:
         return employee
     institution = Institution.query.filter_by(institution_name=identifier).first()
-    if institution:
-        return institution
-    return None
+    return institution
 
 
 def traverse_tree(node, data, visited_nodes):
@@ -249,16 +247,16 @@ def traverse_tree(node, data, visited_nodes):
             traverse_tree(child, data, visited_nodes)
         for record in node.hasEmployed:
             employee = Employee.query.get(record.theEmployee)
+            employer = Employer.query.get(record.theEmployer)
             data['edges'].append({"from": node.id, "to": employee.id, "type": "EmployedInJob"})
             traverse_tree(employee, data, visited_nodes)
+            if employer not in visited_nodes:
+                traverse_tree(employer, data, visited_nodes)
     elif isinstance(node, Employee):
         for record in node.employers:
             employer = Employer.query.get(record.theEmployer)
             if employer.id not in visited_nodes:
                 traverse_tree(employer, data, visited_nodes)
-    elif isinstance(node, Institution):
-        # Add edges for institution relationships if needed
-        pass
 
 
 def add_employer_node(employer, data):
@@ -279,16 +277,13 @@ def add_employee_node(employee, data):
         "name": f"{employee.first_name} {employee.last_name}",
         "phone_number": employee.phone_number,
         "email_address": employee.email_address,
-        "address": employee.employee_address
-    })
+        "address": employee.employee_address})
 
 
 def add_institution_node(institution, data):
     data['nodes'].append({
         "id": institution.id,
-        "type": "Institution",
-        "name": institution.institution_name
-    })
+        "name": institution.institution_name})
 
 
 @app.route("/admin")
