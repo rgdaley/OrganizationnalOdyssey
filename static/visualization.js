@@ -10,9 +10,12 @@ function createChart(visualizationData) {
 
         // Node click event handler
         chart.listen("click", function (e) {
+            console.log("Chart clicked:", e);
             if (e.point) {
                 console.log("Node clicked:", e.point);
                 updateInfoPanel(e.point);
+            } else {
+                console.log("No node clicked");
             }
         });
 
