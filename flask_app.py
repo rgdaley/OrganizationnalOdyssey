@@ -266,7 +266,8 @@ def add_employer_node(employer, data):
         "name": employer.employer_name,
         "start_date": employer.start_date.strftime("%Y-%m-%d"),
         "end_date": employer.end_date.strftime("%Y-%m-%d") if employer.end_date else "Active",
-        "description": employer.description[:100] + "..." if len(employer.description) > 100 else employer.description
+        "description": employer.description,
+        "headquarters_address": employer.headquarters_address
     })
 
 
@@ -277,14 +278,16 @@ def add_employee_node(employee, data):
         "name": f"{employee.first_name} {employee.last_name}",
         "phone_number": employee.phone_number,
         "email_address": employee.email_address,
-        "address": employee.employee_address})
+        "employee_address": employee.employee_address
+    })
 
 
 def add_institution_node(institution, data):
     data['nodes'].append({
         "id": institution.id,
-        "name": institution.institution_name})
-
+        "type": "Institution",
+        "institution_name": institution.institution_name
+    })
 
 @app.route("/admin")
 @login_required

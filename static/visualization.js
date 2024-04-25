@@ -26,7 +26,7 @@ function updateInfoPanel(node) {
                         <strong>${data.type}: ${data.name}</strong><br>`;
 
     if (data.type === "Employer") {
-        content += `Address: ${data.address}<br>
+        content += `Address: ${data.headquarters_address}<br>
                     Start Date: ${data.start_date}<br>
                     End Date: ${data.end_date || 'Active'}<br>`;
         if (data.description) {
@@ -35,9 +35,9 @@ function updateInfoPanel(node) {
     } else if (data.type === "Employee") {
         content += `Email: ${data.email_address}<br>
                     Phone: ${data.phone_number}<br>
-                    Address: ${data.address}`;
+                    Address: ${data.employee_address}`;
     } else if (data.type === "Institution") {
-        content += `Institution Name: ${data.name}`;
+        content += `Institution Name: ${data.institution_name}`;
     }
     content += `</div>`;
 
