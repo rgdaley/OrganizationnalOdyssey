@@ -267,7 +267,7 @@ def traverse_tree(node, data, visited_nodes):
         for record in node.employers:
             employer = Employer.query.get(record.theEmployer)
             data['edges'].append({
-                "from": employee.id,
+                "from": node.id,
                 "to": employer.id,
                 "type": "EmployedInJob",
                 "job_title": record.jobTitle,
@@ -281,7 +281,7 @@ def traverse_tree(node, data, visited_nodes):
             certification = Certification.query.get(cert_form.grantedCertification)
             institution = Institution.query.get(cert_form.grantingInstitution)
             data['edges'].append({
-                "from": employee.id,
+                "from": node.id,
                 "to": certification.id,
                 "type": "HasCertification",
                 "institution": institution.institution_name,
