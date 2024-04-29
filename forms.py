@@ -65,8 +65,8 @@ class AddEmployeeForm(FlaskForm):
 
 
 class EditEmployeeForm(FlaskForm):
-    def __init__(self, formdata=_Auto, **kwargs):
-        super().__init__(formdata, kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.new_last_name = None
         self.new_first_name = None
 
