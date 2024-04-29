@@ -500,7 +500,6 @@ def edit_employee():
         #update
         Employee.first_name = form.new_first_name.datadb.session.commit()
         Employee.last_name = form.new_last_name.datadb.session.commit()
-        flash("Employee Name has been successfully updated!", "success")         return redirect(url_for("admin"))
 
 
         edited = False
@@ -514,9 +513,6 @@ def edit_employee():
             employee.email_address = form.email_address.data
             edited = True
         db.session.commit()
-
-
-
         if edited:
             flash("Employee has been successfully updated!", "success")
     return redirect(url_for("admin"))
