@@ -573,6 +573,19 @@
           {{ edit_certification_form.hidden_tag() }}
           <legend class="border-bottom mb-4">Edit certification</legend>
 
+          <div class="form-group">
+              {{ edit_certification_form.current_certification.label(class="form-control-label") }}
+              {% if edit_certification_form.current_certification.errors %}
+                  {{ edit_certification_form.current_certification(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in edit_certification_form.current_certification.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ edit_certification_form.current_certification(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
 
           <div class="form-group">
               {{ edit_certification_form.new_certification.label(class="form-control-label") }}
