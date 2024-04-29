@@ -122,7 +122,8 @@ class AddCertificationForm(FlaskForm):
 
 
 class EditCertificationForm(FlaskForm):
-    new_certification = StringField("Certification", validators=[DataRequired()])
+    current_certification = StringField("Current Certification", validators=[DataRequired()])
+    new_certification = StringField("New Certification", validators=[DataRequired()])
     submit = SubmitField('Add')
 
 

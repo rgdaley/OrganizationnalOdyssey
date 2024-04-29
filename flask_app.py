@@ -713,20 +713,17 @@ def edit_certification():
         return
 
     form = EditCertificationForm()
+    form.current_certification.choices = [(c.id, c.CertificationName) for c in Certification.query.all()]
+
     if form.validate_on_submit():
-        certification = Certification.query.filter_by(certificationName=form.new_certification.data).first()
-        if not certification:
-            flash(f"{form.new_certification.data} does not exist", "danger")
+        certification = Certification.query.get(form.current_certification.data)
+        if certification:
+            certification.CertificationName = form.new_certification.data
+            db.session.commit()
+            flash("Certification updated successfully!", "success")
             return redirect(url_for("admin"))
-
-        edited = False
-        if form.new_certification.data:
-            certification.new_certification = form.new_certification.data
-            edited = True
-        db.session.commit()
-
-        if edited:
-            flash("Certification has been successfully updated!", "success")
+        else:
+            flash("Certification not found!", "danger")
     return redirect(url_for("admin"))
 
 
