@@ -698,7 +698,7 @@ def add_Certification():
         return redirect(url_for("home"))
     form = AddCertificationForm()
     if form.validate_on_submit():
-        new_Certification = Institution(certificationName:=form.new_certification.data,)
+        new_Certification = Certification(certificationName:=form.new_certification.data,)
 
         db.session.add(new_Certification)
         db.session.commit()
