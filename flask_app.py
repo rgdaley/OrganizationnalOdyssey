@@ -710,20 +710,22 @@ def add_Certification():
 @login_required
 def edit_certification():
     if not current_user.admin:
-        return
+        flash("Unauthorized Access", "danger")
+        return redirect(url_for("home"))
 
     form = EditCertificationForm()
-    form.current_certification.choices = [(c.id, c.CertificationName) for c in Certification.query.all()]
-
     if form.validate_on_submit():
-        certification = Certification.query.get(form.current_certification.data)
-        if certification:
-            certification.CertificationName = form.new_certification.data
-            db.session.commit()
-            flash("Certification updated successfully!", "success")
+        certification = Certification.query.filter_by(CertificationName=form.current_certification.data).first()
+        if not certification:
+            flash(f"Certification '{form.current_certification.data}' does not exist", "danger")
             return redirect(url_for("admin"))
-        else:
-            flash("Certification not found!", "danger")
+
+        # Update the certification name
+        certification.CertificationName = form.new_certification.data
+        db.session.commit()
+        flash("Certification has been successfully updated!", "success")
+        return redirect(url_for("admin"))
+
     return redirect(url_for("admin"))
 
 
