@@ -65,6 +65,11 @@ class AddEmployeeForm(FlaskForm):
 
 
 class EditEmployeeForm(FlaskForm):
+    def __init__(self, formdata=_Auto, **kwargs):
+        super().__init__(formdata, kwargs)
+        self.new_last_name = None
+        self.new_first_name = None
+
     first_name = StringField("First Name", validators=[DataRequired()])
     last_name = StringField("Last Name", validators=[DataRequired()])
     phone_number = StringField("Phone Number", validators=[DataRequired(), Length(min=10, max=15)])

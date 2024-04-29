@@ -497,6 +497,11 @@ def edit_employee():
         if not employee:
             flash(f"{form.first_name.data} {form.last_name.data} does not exist", "danger")
             return redirect(url_for("admin"))
+        #update
+        Employee.first_name = form.new_first_name.datadb.session.commit()
+        Employee.last_name = form.new_last_name.datadb.session.commit()
+        flash("Employee Name has been successfully updated!", "success")         return redirect(url_for("admin"))
+
 
         edited = False
         if form.phone_number.data:
@@ -509,6 +514,8 @@ def edit_employee():
             employee.email_address = form.email_address.data
             edited = True
         db.session.commit()
+
+
 
         if edited:
             flash("Employee has been successfully updated!", "success")
