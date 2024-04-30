@@ -389,6 +389,8 @@ def edit_employer():
         if form.end_date.data:
             employer.end_date = form.end_date.data
             edited = True
+
+        employer.employer_name = form.new_employer_name.data
         db.session.commit()
 
         if edited:
