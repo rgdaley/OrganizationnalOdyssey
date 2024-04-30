@@ -6,7 +6,8 @@ function createChart(visualizationData) {
         chart.nodes().labels().enabled(true).format("{%name}" + " , " + "{%kind}" + " , " + "ID=(" + "{%id}" + ")").fontSize(12).fontWeight(600);
         chart.tooltip().useHtml(true);
         chart.nodes().tooltip().format("{%name}");
-        chart.edges().tooltip().format("Parent: {%from} -> Child: {%to}");
+        chart.edges().tooltip().format("{%kind}: {%from} -> {%kind}: {%to}");
+
 
         // Node click event handler
         chart.listen("click", function(e) {
@@ -16,7 +17,9 @@ function createChart(visualizationData) {
                     console.log("Node clicked:", tag);
                     var update = tag.id
                     console.log("Update:", update)
-                    updateInfoPanel(visualizationData);
+                    var forFunction = update - 1;
+                    var node = visualizationData.nodes[forFunction];
+                    updateInfoPanel(node);
                 }
             }
             else {
@@ -30,26 +33,30 @@ function createChart(visualizationData) {
     });
 }
 
+function getData(update){
+
+}
+
 function updateInfoPanel(node) {
     console.log("updateInfoPanel called with node:", node);
     var infoPanel = document.getElementById('infoPanel');
-    var data = node.getData();
+    var data = node;
     console.log("Node data:", data);
     var content = `<div class="pb-5">
                         <strong>${data.type}: ${data.name}</strong><br>`;
 
-    if (data.type === "Employer") {
+    if (data.kind === "Employer") {
         content += `Address: ${data.headquarters_address}<br>
                     Start Date: ${data.start_date}<br>
                     End Date: ${data.end_date || 'Active'}<br>`;
         if (data.description) {
             content += `Description: ${data.description}`;
         }
-    } else if (data.type === "Employee") {
+    } else if (data.kind === "Employee") {
         content += `Email: ${data.email_address}<br>
                     Phone: ${data.phone_number}<br>
                     Address: ${data.employee_address}`;
-    } else if (data.type === "Institution") {
+    } else if (data.kind === "Institution") {
         content += `Institution Name: ${data.institution_name}`;
     }
     content += `</div>`;
