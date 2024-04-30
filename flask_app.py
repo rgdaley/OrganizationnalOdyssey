@@ -495,36 +495,27 @@ def edit_employee():
 
     form = EditEmployeeForm()
     if form.validate_on_submit():
-        employee = Employee.query.filter_by(current_first_name=form.current_first_name.data, current_last_name=form.current_last_name.data).first()
+        employee = Employee.query.filter_by(first_name=form.current_first_name.data,
+                                            last_name=form.current_last_name.data).first()
         if not employee:
-            flash(f"{form.current_first_name.data} {form.current_last_name.data} does not exist", "danger")
+            flash(f"Employee with the name {form.current_first_name.data} {form.current_last_name.data} does not exist",
+                  "danger")
             return redirect(url_for("admin"))
-        #update
-        Employee.first_name = form.new_first_name.datadb.session.commit()
-        Employee.last_name = form.new_last_name.datadb.session.commit()
-
-
-        edited = False
+        # Update fields
         if form.new_first_name.data:
-            employee.current_first_name = form.new_first_name.data
-            edited = True
+            employee.first_name = form.new_first_name.data
         if form.new_last_name.data:
-            employee.current_last_name = form.new_last_name.data
-            edited = True
+            employee.last_name = form.new_last_name.data
         if form.phone_number.data:
             employee.phone_number = form.phone_number.data
-            edited = True
         if form.employee_address.data:
             employee.employee_address = form.employee_address.data
-            edited = True
         if form.email_address.data:
             employee.email_address = form.email_address.data
-            edited = True
-        db.session.commit()
-        if edited:
-            flash("Employee has been successfully updated!", "success")
-    return redirect(url_for("admin"))
 
+        db.session.commit()
+        flash("Employee has been successfully updated!", "success")
+        return redirect(url_for("admin"))
 
 @app.route("/delete_employee", methods=["POST"])
 @login_required
