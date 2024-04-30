@@ -262,7 +262,7 @@ def traverse_tree(node, data, visited_nodes):
 def add_employer_node(employer, data):
     data['nodes'].append({
         "id": employer.id,
-        "type": "Employer",
+        "kind": "Employer",
         "name": employer.employer_name,
         "start_date": employer.start_date.strftime("%Y-%m-%d"),
         "end_date": employer.end_date.strftime("%Y-%m-%d") if employer.end_date else "Active",
@@ -274,7 +274,7 @@ def add_employer_node(employer, data):
 def add_employee_node(employee, data):
     data['nodes'].append({
         "id": employee.id,
-        "type": "Employee",
+        "kind": "Employee",
         "name": f"{employee.first_name} {employee.last_name}",
         "phone_number": employee.phone_number,
         "email_address": employee.email_address,
@@ -285,7 +285,7 @@ def add_employee_node(employee, data):
 def add_institution_node(institution, data):
     data['nodes'].append({
         "id": institution.id,
-        "type": "Institution",
+        "kind": "Institution",
         "institution_name": institution.institution_name
     })
 
