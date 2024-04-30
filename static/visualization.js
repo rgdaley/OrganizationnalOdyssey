@@ -7,7 +7,7 @@ function createChart(visualizationData) {
         chart.tooltip().useHtml(true);
         chart.nodes().tooltip().format("{%name}");
         chart.edges().tooltip().format("{%kind}" + ": " + "{%from}" +" -> " + "{%kind}" + ": " + "{%to}");
-        
+
 
 
         // Node click event handler
@@ -44,7 +44,7 @@ function updateInfoPanel(node) {
     var data = node;
     console.log("Node data:", data);
     var content = `<div class="pb-5">
-                        <strong>${data.type}: ${data.name}</strong><br>`;
+                        <strong>${data.kind}: ${data.name}</strong><br>`;
 
     if (data.kind === "Employer") {
         content += `Address: ${data.headquarters_address}<br>
