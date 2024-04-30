@@ -72,8 +72,8 @@ class EditEmployeeForm(FlaskForm):
 
     current_first_name = StringField("Current First Name" , validators=[DataRequired()])
     current_last_name = StringField("Current Last Name", validators=[DataRequired()])
-    first_name = StringField("First Name", validators=[DataRequired()])
-    last_name = StringField("Last Name", validators=[DataRequired()])
+    new_first_name = StringField("First Name", validators=[DataRequired()])
+    new_last_name = StringField("Last Name", validators=[DataRequired()])
     phone_number = StringField("Phone Number", validators=[DataRequired(), Length(min=10, max=15)])
     employee_address = StringField("Address", validators=[DataRequired()])
     email_address = StringField("Email Address", validators=[DataRequired(), Email()])
