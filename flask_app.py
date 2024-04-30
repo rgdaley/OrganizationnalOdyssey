@@ -503,6 +503,12 @@ def edit_employee():
 
 
         edited = False
+        if form.new_first_name.data:
+            employee.current_first_name = form.new_first_name.data
+            edited = True
+        if form.new_last_name.data:
+            employee.current_last_name = form.new_last_name.data
+            edited = True
         if form.phone_number.data:
             employee.phone_number = form.phone_number.data
             edited = True
