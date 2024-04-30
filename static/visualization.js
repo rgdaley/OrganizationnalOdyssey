@@ -6,7 +6,8 @@ function createChart(visualizationData) {
         chart.nodes().labels().enabled(true).format("{%name}" + " , " + "{%kind}" + " , " + "ID=(" + "{%id}" + ")").fontSize(12).fontWeight(600);
         chart.tooltip().useHtml(true);
         chart.nodes().tooltip().format("{%name}");
-        chart.edges().tooltip().format("{%kind}: {%from} -> {%kind}: {%to}");
+        chart.edges().tooltip().format("{%kind}" + ": " + "{%from}" +" -> " + "{%kind}" + ": " + "{%to}");
+        
 
 
         // Node click event handler
