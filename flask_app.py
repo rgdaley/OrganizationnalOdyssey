@@ -243,12 +243,12 @@ def traverse_tree(node, data, visited_nodes):
     # Recurse for connected nodes
     if isinstance(node, Employer):
         for child in node.child_employers:
-            data['edges'].append({"from": node.id, "to": child.id, "type": "employer_relation"})
+            data['edges'].append({"from": node.id, "to": child.id, "kind": "employer_relation"})
             traverse_tree(child, data, visited_nodes)
         for record in node.hasEmployed:
             employee = Employee.query.get(record.theEmployee)
             employer = Employer.query.get(record.theEmployer)
-            data['edges'].append({"from": node.id, "to": employee.id, "type": "EmployedInJob"})
+            data['edges'].append({"from": node.id, "to": employee.id, "kind": "EmployedInJob"})
             traverse_tree(employee, data, visited_nodes)
             if employer not in visited_nodes:
                 traverse_tree(employer, data, visited_nodes)

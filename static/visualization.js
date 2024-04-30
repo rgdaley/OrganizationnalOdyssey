@@ -6,7 +6,7 @@ function createChart(visualizationData) {
         chart.nodes().labels().enabled(true).format("{%name}" + " , " + "{%kind}" + " , " + "ID=(" + "{%id}" + ")").fontSize(12).fontWeight(600);
         chart.tooltip().useHtml(true);
         chart.nodes().tooltip().format("{%name}");
-        chart.edges().tooltip().format("Parent: {%from} -> Child: {%to} ({%type})");
+        chart.edges().tooltip().format("Parent: {%from} -> Child: {%to} ({%kind})");
 
 
 
