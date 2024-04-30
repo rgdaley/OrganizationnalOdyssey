@@ -495,7 +495,7 @@ def edit_employee():
 
     form = EditEmployeeForm()
     if form.validate_on_submit():
-        employee = Employee.query.filter_by(first_name=form.current_first_name.data, last_name=form.current_last_name.data).first()
+        employee = Employee.query.filter_by(current_first_name=form.current_first_name.data, current_last_name=form.current_last_name.data).first()
         if not employee:
             flash(f"{form.current_first_name.data} {form.current_last_name.data} does not exist", "danger")
             return redirect(url_for("admin"))
