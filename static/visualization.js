@@ -15,7 +15,7 @@ function createChart(visualizationData) {
             var tag = e.domTarget.tag;
             if (tag && tag.type === 'node') {
                 console.log("Node clicked:", tag);
-                var node = visualizationData.nodes.find(node => node.id === tag.id);
+                var node = visualizationData.nodes.find(node => node.id == tag.id);
                 console.log("Found Node:", node);
                 if (node) {
                     updateInfoPanel(node);
