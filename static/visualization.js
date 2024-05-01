@@ -3,29 +3,27 @@ function createChart(visualizationData) {
     anychart.onDocumentReady(function () {
         var chart = anychart.graph(visualizationData);
         chart.edges().arrows().enabled(true);
-        chart.nodes().labels().enabled(true).format("{%name}" + " , " + "{%kind}" + " , " + "ID=(" + "{%id}" + ")").fontSize(12).fontWeight(600);
+        chart.nodes().labels().enabled(true)
+            .format("{%name}" + " , " + "{%kind}" + " , " + "ID=(" + "{%id}" + ")")
+            .fontSize(12).fontWeight(600);
         chart.tooltip().useHtml(true);
         chart.nodes().tooltip().format("{%name}");
         chart.edges().tooltip().format("Parent: {%from} -> Child: {%to} ({%kind})");
 
-
-
         // Node click event handler
         chart.listen("click", function(e) {
             var tag = e.domTarget.tag;
-            if (tag) {
-                if (tag.type === 'node') {
-                    console.log("Node clicked:", tag);
-                    var update = tag.id;
-                    console.log("Update:", update);
-                    var forFunction = visualizationData.nodes((id) => id = tag.id);
-                    console.log("For Function:", forFunction);
-                    var node = visualizationData.nodes[forFunction];
+            if (tag && tag.type === 'node') {
+                console.log("Node clicked:", tag);
+                var node = visualizationData.nodes.find(node => node.id === tag.id);
+                if (node) {
+                    console.log("Node details:", node);
                     updateInfoPanel(node);
+                } else {
+                    console.log("Node not found for ID:", tag.id);
                 }
-            }
-            else {
-                console.log("No node clicked");
+            } else {
+                console.log("No node clicked or non-node element clicked");
             }
         });
 
