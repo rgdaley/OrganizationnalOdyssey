@@ -817,4 +817,5 @@ def employee_certification_form():
         db.session.commit()
         flash('Employee certification added successfully!', 'success')
         return redirect(url_for('admin'))
+    return redirect(url_for('employee_certification_form', form=form))
 
