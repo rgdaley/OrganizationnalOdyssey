@@ -286,7 +286,7 @@ def add_institution_node(institution, data):
     data['nodes'].append({
         "id": institution.id,
         "kind": "Institution",
-        "institution_name": institution.institution_name
+        "name": institution.institution_name
     })
 
 @app.route("/admin")
