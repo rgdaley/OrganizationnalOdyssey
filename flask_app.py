@@ -100,7 +100,7 @@ class Certification(db.Model):
     CertificationName = db.Column(db.String(60), nullable=False)
 
 class EmployeeCertification(db.Model):
-    __tablename__="employeeCertificationForm"
+    __tablename__="EmployeeCertification"
 
     id = db.Column(db.Integer, primary_key=True)
     certAwardedTo = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)    ##may need to be changed to just "employee" and remove '.id' same goes for as follows
