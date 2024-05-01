@@ -11,24 +11,22 @@ function createChart(visualizationData) {
 
 
         // Node click event handler
-
-    chart.listen("click", function(e) {
-        var tag = e.domTarget.tag;
-        if (tag && tag.type === 'node') {
-            console.log("Node clicked:", tag);
-            // Search for the node in the nodes array by matching the id
-            var node = visualizationData.nodes.find(n => n.id === tag.id);
-            if (node) {
-                console.log("Found node data:", node);
-                updateInfoPanel(node);
-            } else {
-                console.log("No corresponding node found in data for ID:", tag.id);
+        chart.listen("click", function(e) {
+            var tag = e.domTarget.tag;
+            if (tag) {
+                if (tag.type === 'node') {
+                    console.log("Node clicked:", tag);
+                    var update = tag.id
+                    console.log("Update:", update)
+                    var forFunction = update - 1;
+                    var node = visualizationData.nodes[forFunction];
+                    updateInfoPanel(node);
+                }
             }
-        } else {
-            console.log("No node clicked or clicked element is not a node");
-        }
-    });
-
+            else {
+                console.log("No node clicked");
+            }
+        });
 
         chart.container('chart_container');
         chart.draw();
