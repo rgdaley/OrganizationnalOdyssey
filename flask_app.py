@@ -99,7 +99,7 @@ class Certification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     CertificationName = db.Column(db.String(60), nullable=False)
 
-class EmployeeCertificationForm(db.Model):
+class EmployeeCertification(db.Model):
     __tablename__="employeeCertificationForm"
 
     id = db.Column(db.Integer, primary_key=True)
