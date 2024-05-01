@@ -807,7 +807,7 @@ def employee_certification_form():
             return redirect(url_for("admin"))
 
         # Create a new certification record
-        new_cert = EmployeeCertificationForm(
+        new_cert = EmployeeCertification(
             certAwardedTo=employee.id,
             grantingInstitution=institution.id,
             grantedCertification=certification.id,
