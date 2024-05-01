@@ -253,11 +253,37 @@ def traverse_tree(node, data, visited_nodes):
             traverse_tree(employee, data, visited_nodes)
             if employer not in visited_nodes:
                 traverse_tree(employer, data, visited_nodes)
+
     elif isinstance(node, Employee):
+        # Handle Employee's employment and certifications
         for record in node.employers:
             employer = Employer.query.get(record.theEmployer)
-            if employer.id not in visited_nodes:
+            if employer and employer.id not in visited_nodes:
                 traverse_tree(employer, data, visited_nodes)
+        certifications = EmployeeCertificationForm.query.filter_by(certAwardedTo=node.id).all()
+        for certification in certifications:
+            institution = Institution.query.get(certification.grantingInstitution)
+            certification_info = Certification.query.get(certification.grantedCertification)
+            data['edges'].append({
+                "from": institution.id,
+                "to": node.id,
+                "kind": f"Certified in {certification_info.name} on {certification.awardDate.strftime('%Y-%m-%d')}"
+            })
+            if institution.id not in visited_nodes:
+                traverse_tree(institution, data, visited_nodes)
+
+    elif isinstance(node, Institution):
+        certified_employees = EmployeeCertificationForm.query.filter_by(grantingInstitution=node.id).all()
+        for record in certified_employees:
+            employee = Employee.query.get(record.certAwardedTo)
+            certification_info = Certification.query.get(record.grantedCertification)
+            data['edges'].append({
+                "from": node.id,
+                "to": employee.id,
+                "kind": f"Granted {certification_info.name} on {record.awardDate.strftime('%Y-%m-%d')}"
+            })
+            if employee.id not in visited_nodes:
+                traverse_tree(employee, data, visited_nodes)
 
 
 def add_employer_node(employer, data):
