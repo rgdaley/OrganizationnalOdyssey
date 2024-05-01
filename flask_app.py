@@ -793,8 +793,8 @@ def institutions():
     return render_template("institutions.html", all_institutions=all_institutions)
 
 
-@app.route('/add_employee_cert', methods=['GET', 'POST'])
-def add_employee_cert():
+@app.route('/employee_certification_form', methods=['GET', 'POST'])
+def employee_certification_form():
     form = EmployeeCertificationForm()
     if form.validate_on_submit():
         # Fetch the related records based on identifiers (name, ID, etc.)
