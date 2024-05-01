@@ -79,12 +79,15 @@ class EditEmployeeForm(FlaskForm):
 
 
 class EmployeeCertificationForm(FlaskForm):
-    cert_awarded_to = StringField("Cert Awarded To", validators=[DataRequired()])
+    employee_first_name = StringField("Cert Awarded To", validators=[DataRequired()])
+    employee_last_name = StringField("Cert Awarded To", validators=[DataRequired()])
     granting_institution = StringField("Cert Awarded To", validators=[DataRequired()])
     granted_certification = StringField("Cert Awarded To", validators=[DataRequired()])
     award_date = DateField('Award Date', validators=[DataRequired()], format='%Y-%m-%d')
     submit = SubmitField("Add Employee Certification Form")
 
+# Need to adjust this for employee. Has to be Employee First and Last name since that is what we query by.
+# Change the function, HTML, and this flask form
 
 class DeleteEmployeeForm(FlaskForm):
     first_name = StringField("First Name", validators=[DataRequired()])

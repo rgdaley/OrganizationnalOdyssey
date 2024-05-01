@@ -798,9 +798,9 @@ def add_employee_cert():
     form = EmployeeCertificationForm()
     if form.validate_on_submit():
         # Fetch the related records based on identifiers (name, ID, etc.)
-        employee = Employee.query.filter_by(name=form.cert_awarded_to.data).first()
-        institution = Institution.query.filter_by(name=form.granting_institution.data).first()
-        certification = Certification.query.filter_by(name=form.granted_certification.data).first()
+        employee = Employee.query.filter_by(first_name=form.employee_first_name.data, last_name=form.employee_last_name.data).first()
+        institution = Institution.query.filter_by(instiution_name=form.granting_institution.data).first()
+        certification = Certification.query.filter_by(certification_name=form.granted_certification.data).first()
 
         if not all([employee, institution, certification]):
             flash('Invalid employee, institution, or certification details.', 'error')
