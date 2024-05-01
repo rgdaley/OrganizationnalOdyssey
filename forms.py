@@ -32,8 +32,8 @@ class NewEmployerForm(FlaskForm):
 
 
 class EditEmployerForm(FlaskForm):
-    employer_name = StringField("Employer Name", validators=[DataRequired()])
-    new_employer_name = StringField("Employer Name", validators=[DataRequired()])
+    employer_name = StringField("Current Employer Name", validators=[DataRequired()])
+    new_employer_name = StringField("New Employer Name", validators=[DataRequired()])
     headquarters_address = StringField('Headquarters Address', validators=[Optional()])
     description = StringField('Description', validators=[Optional()])
     start_date = DateField('Start Date', validators=[Optional()], format='%Y-%m-%d')
