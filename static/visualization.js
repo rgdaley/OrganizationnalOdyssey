@@ -6,7 +6,7 @@ function createChart(visualizationData) {
         chart.nodes().labels().enabled(true).format("{%name}" + " , " + "{%kind}" + " , " + "ID=(" + "{%id}" + ")").fontSize(12).fontWeight(600);
         chart.tooltip().useHtml(true);
         chart.nodes().tooltip().format("{%name}");
-        chart.edges().tooltip().format("Parent: {%from} -> Child: {%to} ({%kind})");
+        chart.edges().tooltip().format("Parent: {%from} -> Child: {%to} ({%title})");
 
 
 
@@ -53,7 +53,7 @@ function updateInfoPanel(node) {
         content += `Email: ${data.email_address}<br>
                     Phone: ${data.phone_number}<br>
                     Address: ${data.employee_address}`;
-    } 
+    }
     content += `</div>`;
 
     infoPanel.innerHTML = content;

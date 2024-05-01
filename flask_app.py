@@ -248,7 +248,8 @@ def traverse_tree(node, data, visited_nodes):
         for record in node.hasEmployed:
             employee = Employee.query.get(record.theEmployee)
             employer = Employer.query.get(record.theEmployer)
-            data['edges'].append({"from": node.id, "to": employee.id, "kind": "Employee Employment Record"})
+            employeeEmploymentRecord = EmployeeEmploymentRecord.query.get(record.theEmployee)
+            data['edges'].append({"from": node.id, "to": employee.id, "kind": "Employee Employment Record", "title": employeeEmploymentRecord.jobTitle})
             traverse_tree(employee, data, visited_nodes)
             if employer not in visited_nodes:
                 traverse_tree(employer, data, visited_nodes)
