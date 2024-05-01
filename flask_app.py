@@ -272,7 +272,8 @@ def traverse_tree(node, data, visited_nodes):
             data['edges'].append({
                 "from": institution.id,
                 "to": node.id,
-                "kind": f"Certified in {certification_info.name} on {certification.awardDate.strftime('%Y-%m-%d')}"
+                "kind": "Certification",
+                "title": f"Certified in {certification_info.CertificationName} on {certification.awardDate.strftime('%Y-%m-%d')}"
             })
             if institution.id not in visited_nodes:
                 traverse_tree(institution, data, visited_nodes)
@@ -285,7 +286,8 @@ def traverse_tree(node, data, visited_nodes):
             data['edges'].append({
                 "from": node.id,
                 "to": employee.id,
-                "kind": f"Granted {certification_info.name} on {record.awardDate.strftime('%Y-%m-%d')}"
+                "kind": "Certification",
+                "title": f"Granted {certification_info.CertificationName} on {record.awardDate.strftime('%Y-%m-%d')}"
             })
             if employee.id not in visited_nodes:
                 traverse_tree(employee, data, visited_nodes)
@@ -646,13 +648,6 @@ def record_new_job():
 def employees():
     all_employees = Employee.query.all()
     return render_template("employees.html", all_employees=all_employees)
-
-# Still Needed
-# def institutions, def addInstitution, def removeInstitution, def editInstitution, and def addDegreeOrCertification #Jenn
-# add institution page #Gavin
-# update admin page to add forms #Gavin
-# update forms.py to include a addInstitution removeInstitution editInstitution and addDegreeOrCertification #Jenn
-# def addEmployeeCertificationForm, update admin page to add form for EmployeeCertificationForm, update forms.py #Jenn
 
 if __name__ == "__main__":
     app.run()
