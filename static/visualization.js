@@ -16,9 +16,10 @@ function createChart(visualizationData) {
             if (tag) {
                 if (tag.type === 'node') {
                     console.log("Node clicked:", tag);
-                    var update = tag.id
-                    console.log("Update:", update)
-                    var forFunction = update - 1;
+                    var update = tag.id;
+                    console.log("Update:", update);
+                    var forFunction = visualizationData.nodes((id) => id = tag.id);
+                    console.log("For Function:", forFunction);
                     var node = visualizationData.nodes[forFunction];
                     updateInfoPanel(node);
                 }
@@ -32,10 +33,6 @@ function createChart(visualizationData) {
         chart.draw();
         console.log("Chart created successfully");
     });
-}
-
-function getData(update){
-
 }
 
 function updateInfoPanel(node) {
