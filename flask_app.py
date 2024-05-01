@@ -804,7 +804,7 @@ def add_employee_cert():
 
         if not all([employee, institution, certification]):
             flash('Invalid employee, institution, or certification details.', 'error')
-            return render_template('add_employee_cert.html', form=form)
+            return redirect(url_for("admin"))
 
         # Create a new certification record
         new_cert = EmployeeCertificationForm(
@@ -818,4 +818,3 @@ def add_employee_cert():
         flash('Employee certification added successfully!', 'success')
         return redirect(url_for('admin'))
 
-    return render_template('add_employee_cert.html', form=form)
