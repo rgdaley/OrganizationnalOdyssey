@@ -53,9 +53,7 @@ function updateInfoPanel(node) {
         content += `Email: ${data.email_address}<br>
                     Phone: ${data.phone_number}<br>
                     Address: ${data.employee_address}`;
-    } else if (data.kind === "Institution") {
-        content += `Institution Name: ${data.institution_name}`;
-    }
+    } 
     content += `</div>`;
 
     infoPanel.innerHTML = content;
