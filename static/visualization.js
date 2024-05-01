@@ -13,21 +13,20 @@ function createChart(visualizationData) {
         // Node click event handler
         chart.listen("click", function(e) {
             var tag = e.domTarget.tag;
-            if (tag) {
-                if (tag.type === 'node') {
-                    console.log("Node clicked:", tag);
-                    var update = tag.id;
-                    console.log("Update:", update);
-                    var forFunction = visualizationData.nodes.find((id) => id === tag.id);
-                    console.log("For Function:", forFunction);
-                    var node = visualizationData.nodes[forFunction];
+            if (tag && tag.type === 'node') {
+                console.log("Node clicked:", tag);
+                var node = visualizationData.nodes.find(node => node.id === tag.id);
+                console.log("Found Node:", node);
+                if (node) {
                     updateInfoPanel(node);
+                } else {
+                    console.log("Node not found for ID:", tag.id);
                 }
-            }
-            else {
-                console.log("No node clicked");
+            } else {
+                console.log("No node clicked or non-node element clicked");
             }
         });
+
 
         chart.container('chart_container');
         chart.draw();
