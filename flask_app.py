@@ -9,7 +9,7 @@ from sqlalchemy import *
 from forms import RegistrationForm, LoginForm, SearchForm, NewEmployerForm, EditEmployerForm, \
     RelationForm, DeleteEmployerForm, AddAdminForm, RecordNewJobForm, AddEmployeeForm, EditEmployeeForm, \
     DeleteEmployeeForm, AddInstitutionForm, EditInstitutionForm, DeleteInstitutionForm, AddCertificationForm, \
-    DeleteCertificationForm, EditCertificationForm
+    DeleteCertificationForm, EditCertificationForm, EmployeeCertificationForm
 
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_mail import Mail, Message
@@ -342,6 +342,7 @@ def admin():
     add_Certification_form = AddCertificationForm()
     edit_certification_form = EditCertificationForm()
     delete_certification_form = DeleteCertificationForm()
+    employee_certification_form = EmployeeCertificationForm()
 
     return render_template("admin.html", new_employer_form=employer_form,
                            relation_form=relation_form,
@@ -353,7 +354,8 @@ def admin():
                            delete_institution_form=delete_institution_form,
                            add_Certification_form=add_Certification_form,
                            edit_certification_form=edit_certification_form,
-                           delete_certification_form=delete_certification_form
+                           delete_certification_form=delete_certification_form,
+                           employee_certification_form=employee_certification_form
                            )
 
 
@@ -548,6 +550,7 @@ def edit_employee():
         db.session.commit()
         flash("Employee has been successfully updated!", "success")
         return redirect(url_for("admin"))
+
 
 @app.route("/delete_employee", methods=["POST"])
 @login_required
@@ -788,3 +791,31 @@ def delete_certification():
 def institutions():
     all_institutions = Institution.query.all()
     return render_template("institutions.html", all_institutions=all_institutions)
+
+
+@app.route('/add_employee_cert', methods=['GET', 'POST'])
+def add_employee_cert():
+    form = EmployeeCertificationForm()
+    if form.validate_on_submit():
+        # Fetch the related records based on identifiers (name, ID, etc.)
+        employee = Employee.query.filter_by(name=form.cert_awarded_to.data).first()
+        institution = Institution.query.filter_by(name=form.granting_institution.data).first()
+        certification = Certification.query.filter_by(name=form.granted_certification.data).first()
+
+        if not all([employee, institution, certification]):
+            flash('Invalid employee, institution, or certification details.', 'error')
+            return render_template('add_employee_cert.html', form=form)
+
+        # Create a new certification record
+        new_cert = EmployeeCertificationForm(
+            certAwardedTo=employee.id,
+            grantingInstitution=institution.id,
+            grantedCertification=certification.id,
+            awardDate=form.award_date.data
+        )
+        db.session.add(new_cert)
+        db.session.commit()
+        flash('Employee certification added successfully!', 'success')
+        return redirect(url_for('admin'))
+
+    return render_template('add_employee_cert.html', form=form)

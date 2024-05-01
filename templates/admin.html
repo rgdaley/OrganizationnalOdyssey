@@ -25,6 +25,8 @@
         <li><a data-toggle="tab" href="#addcertification" class="btn btn-outline-info border">Add certification</a></li>
         <li><a data-toggle="tab" href="#editcertification" class="btn btn-outline-info border">Edit certification</a></li>
         <li><a data-toggle="tab" href="#deletecertification" class="btn btn-outline-info border">Delete certification</a></li>
+        <li><a data-toggle="tab" href="#addemployeecert" class="btn btn-outline-info border">Add Employee Certification</a></li>
+
     </ul>
 
     <div class="tab-content">
@@ -669,6 +671,66 @@
       </form>
   </div>
 </div>
+
+ <div id="addemployeecert" class="tab-pane">
+    <div class="border shadow p-3 mb-5 bg-white rounded">
+        <form method="POST" action="{{ url_for('add_employee_cert') }}">
+            {{ form.hidden_tag() }}
+            <legend class="border-bottom mb-4">Add Employee Certification</legend>
+            <div class="form-group">
+                {{ form.cert_awarded_to.label(class="form-control-label") }}
+                {% if form.cert_awarded_to.errors %}
+                    {{ form.cert_awarded_to(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.cert_awarded_to.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.cert_awarded_to(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.granting_institution.label(class="form-control-label") }}
+                {% if form.granting_institution.errors %}
+                    {{ form.granting_institution(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.granting_institution.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.granting_institution(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.granted_certification.label(class="form-control-label") }}
+                {% if form.granted_certification.errors %}
+                    {{ form.granted_certification(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.granted_certification.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.granted_certification(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.award_date.label(class="form-control-label") }}
+                {{ form.award_date(class="form-control form-control-lg") }}
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+</div>
+
 
 </div>
 
