@@ -800,7 +800,7 @@ def employee_certification_form():
         # Fetch the related records based on identifiers (name, ID, etc.)
         employee = Employee.query.filter_by(first_name=form.employee_first_name.data, last_name=form.employee_last_name.data).first()
         institution = Institution.query.filter_by(institution_name=form.granting_institution.data).first()
-        certification = Certification.query.filter_by(certification_name=form.granted_certification.data).first()
+        certification = Certification.query.filter_by(CertificationName=form.granted_certification.data).first()
 
         if not all([employee, institution, certification]):
             flash('Invalid employee, institution, or certification details.', 'error')
