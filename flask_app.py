@@ -265,7 +265,7 @@ def traverse_tree(node, data, visited_nodes):
             employer = Employer.query.get(record.theEmployer)
             if employer and employer.id not in visited_nodes:
                 traverse_tree(employer, data, visited_nodes)
-        certifications = EmployeeCertificationForm.query.filter_by(certAwardedTo=node.id).all()
+        certifications = EmployeeCertification.query.filter_by(certAwardedTo=node.id).all()
         for certification in certifications:
             institution = Institution.query.get(certification.grantingInstitution)
             certification_info = Certification.query.get(certification.grantedCertification)
@@ -278,7 +278,7 @@ def traverse_tree(node, data, visited_nodes):
                 traverse_tree(institution, data, visited_nodes)
 
     elif isinstance(node, Institution):
-        certified_employees = EmployeeCertificationForm.query.filter_by(grantingInstitution=node.id).all()
+        certified_employees = EmployeeCertification.query.filter_by(grantingInstitution=node.id).all()
         for record in certified_employees:
             employee = Employee.query.get(record.certAwardedTo)
             certification_info = Certification.query.get(record.grantedCertification)
