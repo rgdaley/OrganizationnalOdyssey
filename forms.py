@@ -122,7 +122,8 @@ class AddInstitutionForm(FlaskForm):
 
 
 class EditInstitutionForm(FlaskForm):
-    institution_name = StringField("Institution Name", validators=[DataRequired()])
+    institution_name = StringField("Current Institution Name", validators=[DataRequired()])
+    new_institution_name = StringField("Current Institution Name", validators=[DataRequired()])
     submit = SubmitField("Edit Institution")
 
 

@@ -199,10 +199,12 @@ def confirm_account(token):
 @app.route("/visualization", methods=["GET", "POST"])
 @login_required
 def visualization(root_node=None):
+    # Initialization of form and data structures
     form = SearchForm()
     data = {"nodes": [], "edges": []}
     visited_nodes = set()
 
+    # Determine start point based on URL parameter or form input
     if root_node:
         start_point = fetch_start_point(root_node)
     else:
@@ -212,6 +214,7 @@ def visualization(root_node=None):
         flash("Start point not found", "danger")
         return redirect(url_for("home"))
 
+    # Traverse from start point and fill `data` with nodes and edges
     traverse_tree(start_point, data, visited_nodes)
     return render_template("visualization.html", data=data)
 
@@ -679,7 +682,8 @@ def add_institution():
 @login_required
 def edit_institution():
     if not current_user.admin:
-        return
+        flash("Unauthorized Access", 'danger')
+        return redirect(url_for("home"))
 
     form = EditInstitutionForm()
     if form.validate_on_submit():
@@ -688,14 +692,11 @@ def edit_institution():
             flash(f"{form.institution_name.data} does not exist", "danger")
             return redirect(url_for("admin"))
 
-        edited = False
-        if form.institution_name.data:
-            institution.institution_name = form.institution_name.data
-            edited = True
+        institution.institution_name = form.new_institution_name.data
         db.session.commit()
+        flash("Institution has been successfully updated!", "success")
+        return redirect(url_for("admin"))
 
-        if edited:
-            flash("Institution has been successfully updated!", "success")
     return redirect(url_for("admin"))
 
 
