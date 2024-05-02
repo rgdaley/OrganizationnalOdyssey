@@ -14,7 +14,7 @@
             <tbody>
                 {% for employee in all_employees %}
                     <tr>
-                        <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                        <td><a class="text-dark" href="{{ url_for('visualization', root_node=employee.first_name + ' ' + employee.last_name) }}">{{ employee.first_name }} {{ employee.last_name }}</a></td>
                         <td>{{ employee.phone_number }}</td>
                         <td>{{ employee.employee_address }}</td>
                         <td>{{ employee.email_address }}</td>
