@@ -11,7 +11,7 @@
            <tbody>
                {% for institution in all_institutions %}
                    <tr>
-                       <td>{{ institution.institution_name  }}</td>
+                       <td><a class ="text-dark"href="{{ url_for('visualization', root_node=institution.institution_name) }}">{{ institution.institution_name  }}</a>`</td>
                    </tr>
                {% endfor %}
            </tbody>
