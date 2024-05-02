@@ -24,7 +24,6 @@
                         <li><a href="{{ url_for("home") }}" class="nav-link px-2 text-white">Home</a></li>
                         <li><a href="{{ url_for("employers") }}" class="nav-link px-2 text-white">Employers</a></li>
                         <li><a href="{{ url_for("employees") }}" class="nav-link px-2 text-white">Employees</a></li>
-                        <li><a href="{{ url_for("visualization") }}" class="nav-link px-2 text-white">Visualization</a></li>
                         {% if current_user.admin == True %}
                             <li><a href="{{ url_for("admin") }}" class="nav-link px-2 text-white">Admin</a></li>
                             <li><a href="{{ url_for("institutions") }}" class="nav-link px-2 text-white">Institutions</a></li>
