@@ -573,6 +573,8 @@ def delete_employee():
 
         EmployeeEmploymentRecord.query.filter_by(theEmployee=employee.id).delete()
 
+        EmployeeCertification.query.filter_by(theEmployee=employee.id).delete()
+
         db.session.delete(employee)
         db.session.commit()
         flash(f"Employee deleted", "success")
