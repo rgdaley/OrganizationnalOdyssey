@@ -246,7 +246,7 @@ def traverse_tree(node, data, visited_nodes):
     # Recurse for connected nodes
     if isinstance(node, Employer):
         for child in node.child_employers:
-            data['edges'].append({"from": node.id, "to": child.id, "kind": "Employer Relation"})
+            data['edges'].append({"from": node.id, "to": child.id, "title": "Employer Relation"})
             traverse_tree(child, data, visited_nodes)
         for record in node.hasEmployed:
             employee = Employee.query.get(record.theEmployee)
